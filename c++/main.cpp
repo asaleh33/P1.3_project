@@ -29,7 +29,16 @@ int main(int argc, char** argv) {
   /* Calling the class iterator to print the tree */
   for (auto iter = myTree.begin(); iter != myTree.end(); ++iter){
     keyval = *iter;
+    std::cout << "Print the tree using the iterator\n";
     std::cout << keyval.first <<":"<< keyval.second << "\n"; }
+
+  /* Calling the class iterator to print the tree */
+  for (auto iter = myTree.cbegin(); iter != myTree.cend(); ++iter){
+    keyval = *iter;
+    std::cout << "Print the tree using the const_iterator\n";
+    std::cout << keyval.first <<":"<< keyval.second << "\n"; }
+
+
 
   return 0;
 }

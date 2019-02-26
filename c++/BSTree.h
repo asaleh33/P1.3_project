@@ -73,13 +73,32 @@ public:
   Iterator begin() {
     Node *current = head.get(); 
     while (current->left){
-      current = current->left.get();}
+      current = current->left.get(); }
   return Iterator(current); } 
 
- 
   /* end function of the iterator class */
   Iterator end() {
   return Iterator{nullptr}; }
+
+  /* cbegin function of the ConstIterator class */
+  ConstIterator cbegin(){
+    Node *current = head.get(); 
+    while (current->left.get()){
+      current = current->left.get(); } 
+  return ConstIterator(current); }
+
+  ConstIterator cbegin() const{
+    Node *current = head.get(); 
+    while (current->left.get()){
+      current = current->left.get(); } 
+  return ConstIterator(current); }
+
+  /* end function of the ConstIterator class */
+  ConstIterator cend() {
+  return ConstIterator{nullptr}; }
+
+  ConstIterator cend() const {
+  return ConstIterator{nullptr}; }
 
   /* Tree Constructor */  
   BSTree(): TreeSize{0} {}
