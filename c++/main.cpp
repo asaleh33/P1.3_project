@@ -39,6 +39,13 @@ int main(int argc, char** argv) {
     std::cout << keyval.first <<":"<< keyval.second << "\n"; }
 
 
+  /* Calling Tree Clear function */
+  std::cout << "\nRunning Tree Clear function...\n";
+  myTree.TreeClear();
+  std::cout<<'\n';
+
+
+
 
   return 0;
 }

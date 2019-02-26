@@ -10,7 +10,7 @@ class BSTree
 private:
 
   /* to sort number of nodes */
-  std::size_t TreeSize; 
+  std::size_t _size; 
 
   struct Node;
   typedef std::unique_ptr<Node> SmartTreeNode;
@@ -101,7 +101,7 @@ public:
   return ConstIterator{nullptr}; }
 
   /* Tree Constructor */  
-  BSTree(): TreeSize{0} {}
+  BSTree(): _size{0} {}
 
   /* Tree Destructor */
   ~BSTree() noexcept = default;
@@ -109,12 +109,12 @@ public:
   /* Methods -- memebr functions */
   void InsertKey(const std::pair<const K,V>& pair);
   void TreeTraversal();
+  void TreeClear(); 
   
   void InsertKeyRecursive(const std::pair<const K,V>& pair, Node* Ptr); 
   void TreeTraversalRecursive(Node* Ptr);
+  void TreeClearRecursive(Node* Ptr); 
 };
-
-
 
 
 
@@ -204,3 +204,39 @@ void BSTree<K,V>::TreeTraversalRecursive(Node* Ptr)
   }  
   return;
 }
+
+
+/* Tree Clear function */
+template<class K, class V>
+void BSTree<K,V>::TreeClear()
+{
+  /* It starts its recursive process from the head node */ 
+  TreeClearRecursive(head.get());
+
+  /* Checking if the tree is already cleared */
+  if (head == nullptr) {
+    std::cout << "The tree has been cleared..." << std::endl; } 
+  return; 
+}
+
+/* Tree Clear recursive function */
+template<class K, class V>
+void BSTree<K,V>::TreeClearRecursive(Node* Ptr)
+{
+  /* Check if the tree is empty or not, then clear the tree*/
+  if (head != nullptr){
+    /* Reset head to nullptr and then set empty tree of 0 size */
+    head.reset(); 
+    _size=0; }
+  
+  else
+  {
+    std::cout << "From the Clear function, the original tree has no elements to be cleared!" << std::endl; 
+  }
+  return;
+} 
+
+
+
+
+
