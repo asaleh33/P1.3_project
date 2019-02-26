@@ -59,6 +59,17 @@ public:
       bool operator!=(const Iterator& other) { return !(*this == other); }
   };
 
+  /* begin function of the iterator class */
+  Iterator begin() {
+    Node *current = head.get(); 
+    while (current->left){
+      current = current->left.get();}
+  return Iterator(current); } 
+  
+  /* end function of the iterator class */
+  Iterator end() {
+  return Iterator{nullptr}; }
+
   /* Tree Constructor */  
   BSTree(): TreeSize{0} {}
 
