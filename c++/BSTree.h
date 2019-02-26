@@ -33,7 +33,32 @@ private:
   SmartTreeNode head;
  
 public:
-    
+
+  /* Iterator class */
+  class Iterator{
+    using Node = BSTree<K, V>::Node;
+    Node* current;
+
+    public:
+      Iterator(Node* n) : current{n} {}
+      std::pair<const K,V>& operator*() const { return {current->keyval}; }
+        
+      Iterator& operator++(){
+        if (! (current-> right.get()) ){
+          current = current-> parent; 
+        return *this; } 
+        
+        current = current->right.get();
+
+        while (current->left.get()){
+          current = current->left.get(); }
+      return *this;
+      }   
+
+      bool operator==(const Iterator& other) { return current == other.current; }  // they watch same node
+      bool operator!=(const Iterator& other) { return !(*this == other); }
+  };
+
   /* Tree Constructor */  
   BSTree(): TreeSize{0} {}
 
