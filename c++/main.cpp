@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
   myTree.TreeTraversal(); 
   std::cout << "\n "; 
 
-  /* Calling the class Iterator and the InsertKey function of the tree */
+  /* Calling the class iterator to print the tree */
   for (auto iter = myTree.begin(); iter != myTree.end(); ++iter){
     keyval = *iter;
     std::cout << keyval.first <<":"<< keyval.second << "\n"; }

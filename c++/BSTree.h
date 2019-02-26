@@ -59,13 +59,24 @@ public:
       bool operator!=(const Iterator& other) { return !(*this == other); }
   };
 
+
+  /* ConstIterator class */
+  class ConstIterator: public Iterator{
+    public:
+      using parent = BSTree<K,V>::Iterator;
+      using parent::Iterator; 
+
+      const std::pair<const K,V>& operator*() const { return parent::operator*(); }
+  };
+
   /* begin function of the iterator class */
   Iterator begin() {
     Node *current = head.get(); 
     while (current->left){
       current = current->left.get();}
   return Iterator(current); } 
-  
+
+ 
   /* end function of the iterator class */
   Iterator end() {
   return Iterator{nullptr}; }
@@ -83,6 +94,9 @@ public:
   void InsertKeyRecursive(const std::pair<const K,V>& pair, Node* Ptr); 
   void TreeTraversalRecursive(Node* Ptr);
 };
+
+
+
 
 
 /* Tree Insert function */ 
