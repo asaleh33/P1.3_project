@@ -127,10 +127,12 @@ public:
   /* Methods -- memebr functions */
   void InsertKey(const std::pair<const K,V>& pair);
   void TreeTraversal();
+  int TreeFindLargest(const std::pair<const K,V>& pair);
   void TreeClear(); 
   
   void InsertKeyRecursive(const std::pair<const K,V>& pair, Node* Ptr); 
   void TreeTraversalRecursive(Node* Ptr);
+  int TreeFindRightRecursive(const std::pair<const K,V>& pair, Node* Ptr);
   void CopyTreeRecursive(const BSTree<K, V>::Node* Ptr);
   void TreeClearRecursive(Node* Ptr); 
 };
@@ -140,7 +142,7 @@ public:
 template<class K, class V>  
 void BSTree<K,V>::InsertKey(const std::pair<const K,V>& keyval)
 {
-  /* head has to be pointed to nullptr */
+  /* head "up" has to be pointed to nullptr */
   if(head == nullptr){ head.reset(new Node{keyval, nullptr}); }
 
   else
@@ -221,6 +223,35 @@ void BSTree<K,V>::TreeTraversalRecursive(Node* Ptr)
     std::cout << "The original tree has no numbers [empty tree!]\n\n";
   }  
   return;
+}
+
+
+/* Tree Find largest function */ 
+template<class K, class V>
+int BSTree<K,V>::TreeFindLargest(const std::pair<const K,V>& keyval)
+{
+  /* Checking if the tree is empty */
+  if (head == nullptr) {
+    std::cout << "The original tree has no elements! \n";
+    return -1; } // returning a negative value, which is not included in the tree
+  
+  return TreeFindRightRecursive(keyval, head.get());
+}
+
+/* Tree Find recursive function */
+template<class K, class V>  
+int BSTree<K,V>::TreeFindRightRecursive(const std::pair<const K,V>& keyval, Node* Ptr)
+{
+  
+  /* check if the right pointer is pointing to a Node. The function
+     is looking for the largest element of the tree (right sub-tree). */
+  if (Ptr-> right.get() != nullptr)
+  {
+    return TreeFindRightRecursive(keyval, Ptr-> right.get());
+  }
+
+  else { return Ptr->keyval.first; }
+
 }
 
 
@@ -323,8 +354,3 @@ void BSTree<K,V>::TreeClearRecursive(Node* Ptr)
   }
   return;
 } 
-
-
-
-
-
