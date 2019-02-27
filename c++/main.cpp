@@ -8,7 +8,6 @@
 
 int TreeKeys[9] = {8,10,14,13,3,6,7,4,1};
 int Treevalues[9] = {8,10,14,13,3,6,7,4,1};
-int num;
 
 int main(int argc, char** argv) {
 
@@ -44,8 +43,12 @@ int main(int argc, char** argv) {
 
   /* Calling Tree Find function -- find the largest element in the tree */
   std::cout << "\nRunning Find function...\n";
+  /* Find a specific number in the tree */
+  myTree.TreeFind(keyval); 
+  /* Find the largest number in the tree */
   std::cout << "The largest element in the tree is:" << " " << myTree.TreeFindLargest(keyval) << std::endl;
 
+            
 
   /* Testing copy semantics */
   std::cout << "\nRunning copy semantics...\n";

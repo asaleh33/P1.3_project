@@ -127,6 +127,7 @@ public:
   /* Methods -- memebr functions */
   void InsertKey(const std::pair<const K,V>& pair);
   void TreeTraversal();
+  int TreeFind(const std::pair<const K,V>& pair);
   int TreeFindLargest(const std::pair<const K,V>& pair);
   void TreeClear(); 
   
@@ -226,32 +227,43 @@ void BSTree<K,V>::TreeTraversalRecursive(Node* Ptr)
 }
 
 
+/* Tree Find specific number using (const_iterator) */
+template<class K, class V>  
+int BSTree<K,V>::TreeFind(const std::pair<const K,V>& keyval)
+{
+  int num = 7;
+  for (auto iter = cbegin(); iter != cend(); ++iter) {
+  auto keyval = *iter;
+  //std:: cout << "TESTCONST " << keyval.first << "\n";}
+  if (keyval.first == num) {
+    std::cout << "Number [" << num << "] is found in the tree!" << "\n"; 
+    break; } }
+
+ return num;
+}
+
+
 /* Tree Find largest function */ 
 template<class K, class V>
 int BSTree<K,V>::TreeFindLargest(const std::pair<const K,V>& keyval)
 {
-  /* Checking if the tree is empty */
+  /* Checking if the tree is empty */ 
   if (head == nullptr) {
     std::cout << "The original tree has no elements! \n";
     return -1; } // returning a negative value, which is not included in the tree
-  
-  return TreeFindRightRecursive(keyval, head.get());
-}
 
-/* Tree Find recursive function */
+  return TreeFindRightRecursive(keyval, head.get());
+} 
+
 template<class K, class V>  
 int BSTree<K,V>::TreeFindRightRecursive(const std::pair<const K,V>& keyval, Node* Ptr)
 {
-  
-  /* check if the right pointer is pointing to a Node. The function
-     is looking for the largest element of the tree (right sub-tree). */
-  if (Ptr-> right.get() != nullptr)
-  {
-    return TreeFindRightRecursive(keyval, Ptr-> right.get());
-  }
-
-  else { return Ptr->keyval.first; }
-
+  /* check if right pointer is pointing to a Node. The function
+     is looking for the smallest element of the tree. */
+  if (Ptr-> right.get() != nullptr) {
+    return TreeFindRightRecursive(keyval, Ptr-> right.get()); }
+  else {
+    return Ptr->keyval.first; }
 }
 
 
