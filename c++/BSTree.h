@@ -231,15 +231,13 @@ void BSTree<K,V>::TreeTraversalRecursive(Node* Ptr)
 template<class K, class V>  
 int BSTree<K,V>::TreeFind(const std::pair<const K,V>& keyval)
 {
-  int num = 7;
-  for (auto iter = cbegin(); iter != cend(); ++iter) {
-  auto keyval = *iter;
-  //std:: cout << "TESTCONST " << keyval.first << "\n";}
-  if (keyval.first == num) {
-    std::cout << "Number [" << num << "] is found in the tree!" << "\n"; 
-    break; } }
-
- return num;
+  const int num = 7;
+  for (auto iter = cbegin(); iter != cend(); ++iter){ 
+    auto keyval = *iter;
+    //std:: cout << "TESTCONST " << keyval.first << "\n";
+    if (keyval.first == num) break; }
+  std::cout << "Number [" << num << "] is found in the tree!" << "\n"; 
+  return num;
 }
 
 
