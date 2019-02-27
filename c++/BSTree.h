@@ -9,6 +9,9 @@ class BSTree
 
 private:
 
+  /* to sort number of nodes */
+  std::size_t _size; 
+ 
   struct Node;
   typedef std::unique_ptr<Node> SmartTreeNode;
   struct Node{
@@ -101,9 +104,6 @@ public:
   ConstIterator cend() {
   return ConstIterator{nullptr}; }
 
-  /* to sort number of nodes */
-  std::size_t _size; 
- 
   /* Tree Constructor */  
   BSTree(): _size{0} {}
 
