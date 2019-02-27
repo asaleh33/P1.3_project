@@ -76,9 +76,18 @@ public:
       current = current->left.get(); }
   return Iterator(current); } 
 
-  
+  Iterator begin() const {
+    Node *current = head.get(); 
+    while (current->left){
+      current = current->left.get(); }
+  return Iterator(current); } 
+
+
   /* end function of the iterator class */
   Iterator end() {
+  return Iterator{nullptr}; }
+
+  Iterator end() const{
   return Iterator{nullptr}; }
 
   /* cbegin function of the ConstIterator class */
@@ -88,17 +97,8 @@ public:
       current = current->left.get(); } 
   return ConstIterator(current); }
 
-  ConstIterator cbegin() const{
-    Node *current = head.get(); 
-    while (current->left.get()){
-      current = current->left.get(); } 
-  return ConstIterator(current); }
-
   /* end function of the ConstIterator class */
   ConstIterator cend() {
-  return ConstIterator{nullptr}; }
-
-  ConstIterator cend() const {
   return ConstIterator{nullptr}; }
 
   /* to sort number of nodes */
@@ -109,9 +109,6 @@ public:
 
   /* Tree Destructor */
   ~BSTree() noexcept = default;
-
-
-
 
   /* Copy Tree constructor -- deep copy */
   BSTree(const BSTree&);
@@ -136,11 +133,7 @@ public:
   void TreeTraversalRecursive(Node* Ptr);
   void CopyTreeRecursive(const BSTree<K, V>::Node* Ptr);
   void TreeClearRecursive(Node* Ptr); 
-
-   
-  
 };
-
 
 
 /* Tree Insert function */ 
@@ -244,8 +237,7 @@ template<class K, class V>
 BSTree<K, V>& BSTree<K, V>::operator=(const BSTree<K, V>& Tree) 
 {
   //(*this).TreeClear();              // clear memory
-  head.reset();
-  std::cout << "msg from copy" << std::endl;  
+  head.reset();			      // clear memory		
   auto Tree_temp = Tree;              // copy Tree to Tree_temp
   (*this) = std::move(Tree_temp);     // implement move assignment
 
@@ -258,12 +250,12 @@ BSTree<K, V>& BSTree<K, V>::operator=(const BSTree<K, V>& Tree)
 template <class K, class V>
 void BSTree<K,V>::CopyTreeRecursive(const BSTree<K, V>::Node* Ptr)
 {
-  if (!Ptr) return;
-
+  if (Ptr) {
     InsertKey(Ptr->keyval);
     CopyTreeRecursive(Ptr->left.get());
     CopyTreeRecursive(Ptr->right.get());
-  
+  }    
+
   return;     
 }
 
@@ -272,7 +264,7 @@ void BSTree<K,V>::CopyTreeRecursive(const BSTree<K, V>::Node* Ptr)
 template <class K, class V>
 BSTree<K, V>::BSTree(BSTree&& Tree) noexcept
   :head{std::move(Tree.head)}, _size{std::move(Tree._size)}{
-    //Tree._size = 0;
+    Tree._size = 0;
     std::cout << "Move Tree\n";
 }
 
@@ -283,7 +275,7 @@ BSTree<K, V>& BSTree<K, V>::operator=(BSTree&& Tree) noexcept
   std::cout << "Move assignment\n";
   _size = std::move(Tree._size);
   head = std::move(Tree.head);
-  //Tree._size = 0;
+  Tree._size = 0;
   std::cout << "End of move assignment" << std::endl;
   return *this;
 }
@@ -292,14 +284,11 @@ BSTree<K, V>& BSTree<K, V>::operator=(BSTree&& Tree) noexcept
 template <class K, class V>
 std::ostream& operator<<(std::ostream& os, const BSTree<K, V>& Tree)
 {
-  std::cout << " TEST from ostream operator<<\n";
-
-
-  if(!Tree._size) {
-    return os <<"" << std::endl; }
+  if(!Tree._size){
+    return os <<"" << std::endl;}
 
   for (const auto& x : Tree)
-    os << x.first << " " << x.second << " ";
+    os << x.first << ":" << x.second << " ";
     os << " " << std::endl;
   return os;
 }

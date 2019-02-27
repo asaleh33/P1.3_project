@@ -38,14 +38,11 @@ int main(int argc, char** argv) {
     std::cout << "Print the tree using the const_iterator\n";
     std::cout << keyval.first <<":"<< keyval.second << "\n"; }
 
-
   /* Testing copy semantics */
   std::cout << "Running copy semantics...\n";
   BSTree<int,int> myTree_copy;
   myTree_copy = myTree;
-  std::cout << "Print the tree after copying...\n" << myTree_copy;
-  std::cout<<'\n';
-
+  std::cout << "\nPrinting the tree after copying...\n" << myTree_copy;
 
   /* Calling Tree Clear function */
   std::cout << "\nRunning Tree Clear function...\n";
