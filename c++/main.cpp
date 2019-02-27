@@ -13,6 +13,8 @@ int main(int argc, char** argv) {
 
   BSTree<int,int> myTree;
   std::pair<int,int> keyval;
+  BSTree<int,int> myTree_copy;
+  BSTree<int, int> myTree_move; 
 
   std::cout << "Before inserting numbers, print the tree in order:\n";
   myTree.TreeTraversal();
@@ -40,9 +42,15 @@ int main(int argc, char** argv) {
 
   /* Testing copy semantics */
   std::cout << "Running copy semantics...\n";
-  BSTree<int,int> myTree_copy;
   myTree_copy = myTree;
   std::cout << "\nPrinting the tree after copying...\n" << myTree_copy;
+
+  /* Testing move semantics */
+  std::cout << "Running move semantics...\n";
+  myTree_move = std::move(myTree);
+  std::cout << "\nPrint the tree after moving...\n" << myTree_move;
+  std::cout<<'\n';
+
 
   /* Calling Tree Clear function */
   std::cout << "\nRunning Tree Clear function...\n";
