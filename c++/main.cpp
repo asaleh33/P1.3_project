@@ -2,7 +2,8 @@
 #include<cstdlib>
 #include<algorithm>
 #include<memory>
-#include<vector>
+//#include<vector>
+#include <utility>      // std::pair, std::make_pair
 
 #include"BSTree.h"
 
@@ -17,7 +18,7 @@ int main(int argc, char** argv) {
   BSTree<int, int> myTree_move; 
 
   std::cout << "Before inserting numbers, print the tree in order:\n";
-  myTree.TreeTraversal();
+  myTree.TreeTraversal(keyval);
 
   for(int i=0; i < 9; i++) {
     keyval.first = TreeKeys[i];
@@ -25,7 +26,7 @@ int main(int argc, char** argv) {
     myTree.InsertKey(keyval); }
 
   std::cout << "\nPrinting the original tree after inserting numbers -- print the tree in order: " << std::endl;
-  myTree.TreeTraversal(); 
+  myTree.TreeTraversal(keyval); 
   std::cout << "\n "; 
 
   /* Calling the class iterator to print the tree */
@@ -41,20 +42,20 @@ int main(int argc, char** argv) {
     std::cout << keyval.first <<":"<< keyval.second << "\n"; }
 
 
-  /* Calling Tree Find function -- find the largest element in the tree */
+  /* Calling Tree Find function */
   std::cout << "\nRunning Find function...\n";
-  /* Find a specific number in the tree */
+  /* Find a specific element in the tree */
   myTree.TreeFind(keyval); 
   /* Find the largest number in the tree */
   std::cout << "The largest element in the tree is:" << " " << myTree.TreeFindLargest(keyval) << std::endl;
-
-            
+   
+ 
 
   /* Testing copy semantics */
   std::cout << "\nRunning copy semantics...\n";
   myTree_copy = myTree;
   std::cout << "\nAGAIN: printing the tree BEFORE copying...\n";
-  myTree.TreeTraversal(); 
+  myTree.TreeTraversal(keyval); 
   std::cout << "\nPrinting the tree after copying...\n" << myTree_copy;
 
   /* Testing move semantics */
@@ -62,6 +63,12 @@ int main(int argc, char** argv) {
   myTree_move = std::move(myTree_copy);
   std::cout << "\nPrint the tree after moving...\n" << myTree_move;
   std::cout<<'\n';
+
+
+  /* Calling Tree Balance function  */
+  std::cout << "\nRunning Balance function...\n";
+  myTree.TreeBalance();
+  
 
 
   /* Calling Tree Clear function */

@@ -2,6 +2,7 @@
 #include<cstdlib>
 #include<algorithm>
 #include <memory>
+#include <utility>      // std::pair, std::make_pair
 
 template<class K, class V>
 class BSTree
@@ -126,14 +127,16 @@ public:
     
   /* Methods -- memebr functions */
   void InsertKey(const std::pair<const K,V>& pair);
-  void TreeTraversal();
-  int TreeFind(const std::pair<const K,V>& pair);
+  void TreeTraversal(const std::pair<const K,V>& pair);
+  void TreeFind(const std::pair<const K,V>& pair);
   int TreeFindLargest(const std::pair<const K,V>& pair);
+  void TreeBalance();
   void TreeClear(); 
   
   void InsertKeyRecursive(const std::pair<const K,V>& pair, Node* Ptr); 
   void TreeTraversalRecursive(Node* Ptr);
   int TreeFindRightRecursive(const std::pair<const K,V>& pair, Node* Ptr);
+  void TreeBalanceRecursive();
   void CopyTreeRecursive(const BSTree<K, V>::Node* Ptr);
   void TreeClearRecursive(Node* Ptr); 
 };
@@ -192,7 +195,7 @@ void BSTree<K,V>::InsertKeyRecursive(const std::pair<const K,V>& keyval, Node* P
 
 /* Tree traversal order */
 template<class K, class V>  
-void BSTree<K,V>::TreeTraversal() 
+void BSTree<K,V>::TreeTraversal(const std::pair<const K,V>& k) 
 {
   TreeTraversalRecursive(head.get()); 
   return;
@@ -227,17 +230,16 @@ void BSTree<K,V>::TreeTraversalRecursive(Node* Ptr)
 }
 
 
-/* Tree Find specific number using (const_iterator) */
+/* Tree Find specific number in the tree using (const_iterator) */
 template<class K, class V>  
-int BSTree<K,V>::TreeFind(const std::pair<const K,V>& keyval)
+void BSTree<K,V>::TreeFind(const std::pair<const K,V>& keyval)
 {
-  const int num = 7;
-  for (auto iter = cbegin(); iter != cend(); ++iter){ 
+  const int num = 3;
+  for (auto iter = cbegin(); iter != cend(); ++iter) {
     auto keyval = *iter;
     //std:: cout << "TESTCONST " << keyval.first << "\n";
-    if (keyval.first == num) break; }
-  std::cout << "Number [" << num << "] is found in the tree!" << "\n"; 
-  return num;
+    if (keyval.first == num) {
+      std::cout << "Number [" << num << "] is found in the tree!" << "\n"; break; }}
 }
 
 
@@ -262,6 +264,63 @@ int BSTree<K,V>::TreeFindRightRecursive(const std::pair<const K,V>& keyval, Node
     return TreeFindRightRecursive(keyval, Ptr-> right.get()); }
   else {
     return Ptr->keyval.first; }
+}
+
+
+/* Tree Balance function */
+template<class K, class V>
+void BSTree<K,V>::TreeBalance()
+{     
+  int veckey[] = {100, 200, 300, 40, 500, 60, 70, 8000, 900}; 
+  int vecval[] = {100, 200, 300, 40, 500, 60, 70, 8000, 900};
+  std::pair<int,int> vec_keyval;
+
+  std::pair<int,int> vec_left;
+  std::pair<int,int> vec_right;
+  
+  //int _size_vec = sizeof(veckey)/sizeof(veckey[0]);
+ 
+  /* Declaring std vector of pairs */
+  std::vector<std::pair <int,int> > Vector;
+  
+  /* Inserting values in pairs */
+  for (int i=0; i<=8; i++) Vector.push_back( std::make_pair(veckey[i], vecval[i]) ); 
+  
+  /* Printing the pair vector */
+  /*for (int i=0; i< Vector.size(); i++) {
+    std::cout << Vector[i].first << ":" << Vector[i].second << std::endl; }*/
+
+  /* Calling the class iterator and print the vector contents */
+  std::cout << "Printing vector of size [" << Vector.size() << "] in pairs...\n";
+  for (auto iter = Vector.begin(); iter != Vector.end(); ++iter){
+    vec_keyval = *iter; 
+    //std::cout << vec_keyval.first << ":" << vec_keyval.second << std::endl; 
+
+  std::cout << "\nTEST FROM BALANCE\n";
+  InsertKey(vec_keyval);
+  TreeTraversal(vec_keyval); }
+  
+  std::size_t const vec_med = Vector.size() / 2; 
+
+  
+  /*if (Vector.size() > 1){
+    std::size_t const VecMedian = Vector.size() / 2+1;
+    //std::cout << "TEST_MEDIAN:" << " " << VecMedian << std::endl;
+    TreeBalanceRecursive();
+
+    std::vector<std::pair <int,int> > VecLeft(Vector.begin(), Vector.begin() + VecMedian);
+    TreeBalanceRecursive();
+
+    std::vector<std::pair <int,int> > split_hi(Vector.begin() + VecMedian, Vector.end());
+    TreeBalanceRecursive();
+  } */
+
+  /*else{ 
+    std::cerr << "[Error!] Vector size [" <<  Vector.size() << "]"<< " is indivisible. Try bigger size..." << '\n';
+    std::exit(-100);
+  } */
+
+  return;
 }
 
 
