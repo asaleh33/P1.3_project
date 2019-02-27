@@ -9,9 +9,6 @@ class BSTree
 
 private:
 
-  /* to sort number of nodes */
-  std::size_t _size; 
-
   struct Node;
   typedef std::unique_ptr<Node> SmartTreeNode;
   struct Node{
@@ -33,6 +30,9 @@ private:
   SmartTreeNode head;
  
 public:
+
+  template<class KOS, class VOS>
+  friend std::ostream& operator<<(std::ostream&, const BSTree<KOS, VOS>&); 
 
   /* Iterator class */
   class Iterator{
@@ -76,6 +76,7 @@ public:
       current = current->left.get(); }
   return Iterator(current); } 
 
+  
   /* end function of the iterator class */
   Iterator end() {
   return Iterator{nullptr}; }
@@ -100,11 +101,31 @@ public:
   ConstIterator cend() const {
   return ConstIterator{nullptr}; }
 
+  /* to sort number of nodes */
+  std::size_t _size; 
+ 
   /* Tree Constructor */  
   BSTree(): _size{0} {}
 
   /* Tree Destructor */
   ~BSTree() noexcept = default;
+
+
+
+
+  /* Copy Tree constructor -- deep copy */
+  BSTree(const BSTree&);
+
+  /* Copy Constructor assignment -- deep copy */
+  BSTree& operator=(const BSTree& Tree);
+
+
+  /* Move Constructor */
+  BSTree(BSTree&& Tree) noexcept; 
+
+  /* Move Constructor assignment */
+  BSTree& operator=(BSTree&& Tree) noexcept;
+
     
   /* Methods -- memebr functions */
   void InsertKey(const std::pair<const K,V>& pair);
@@ -113,7 +134,11 @@ public:
   
   void InsertKeyRecursive(const std::pair<const K,V>& pair, Node* Ptr); 
   void TreeTraversalRecursive(Node* Ptr);
+  void CopyTreeRecursive(const BSTree<K, V>::Node* Ptr);
   void TreeClearRecursive(Node* Ptr); 
+
+   
+  
 };
 
 
@@ -203,6 +228,80 @@ void BSTree<K,V>::TreeTraversalRecursive(Node* Ptr)
     std::cout << "The original tree has no numbers [empty tree!]\n\n";
   }  
   return;
+}
+
+
+/* Copy semantics:: copy Tree constructor -- deep copy */
+template <class K, class V>
+BSTree<K,V>::BSTree(const BSTree<K, V>& Tree)
+{    
+  std::cout << "Copy Tree constructor" << std::endl;
+  CopyTreeRecursive( Tree.head.get() );
+}
+
+/* Copy assignemt for the tree */
+template<class K, class V>
+BSTree<K, V>& BSTree<K, V>::operator=(const BSTree<K, V>& Tree) 
+{
+  //(*this).TreeClear();              // clear memory
+  head.reset();
+  std::cout << "msg from copy" << std::endl;  
+  auto Tree_temp = Tree;              // copy Tree to Tree_temp
+  (*this) = std::move(Tree_temp);     // implement move assignment
+
+  std::cout << "End of copy assignment" << std::endl;
+  return *this;
+}
+
+
+/* Copy helper function  */
+template <class K, class V>
+void BSTree<K,V>::CopyTreeRecursive(const BSTree<K, V>::Node* Ptr)
+{
+  if (!Ptr) return;
+
+    InsertKey(Ptr->keyval);
+    CopyTreeRecursive(Ptr->left.get());
+    CopyTreeRecursive(Ptr->right.get());
+  
+  return;     
+}
+
+
+/* Move semantics */
+template <class K, class V>
+BSTree<K, V>::BSTree(BSTree&& Tree) noexcept
+  :head{std::move(Tree.head)}, _size{std::move(Tree._size)}{
+    //Tree._size = 0;
+    std::cout << "Move Tree\n";
+}
+
+/* Move assignment */ 
+template <class K, class V>
+BSTree<K, V>& BSTree<K, V>::operator=(BSTree&& Tree) noexcept
+{
+  std::cout << "Move assignment\n";
+  _size = std::move(Tree._size);
+  head = std::move(Tree.head);
+  //Tree._size = 0;
+  std::cout << "End of move assignment" << std::endl;
+  return *this;
+}
+
+
+template <class K, class V>
+std::ostream& operator<<(std::ostream& os, const BSTree<K, V>& Tree)
+{
+  std::cout << " TEST from ostream operator<<\n";
+
+
+  if(!Tree._size) {
+    return os <<"" << std::endl; }
+
+  for (const auto& x : Tree)
+    os << x.first << " " << x.second << " ";
+    os << " " << std::endl;
+  return os;
 }
 
 
