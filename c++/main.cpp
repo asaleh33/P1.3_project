@@ -3,19 +3,20 @@
 #include<algorithm>
 #include<memory>
 #include <utility>      // std::pair, std::make_pair
-
-#include <cstdio> // clock()
-#include <ctime> // clock()
+#include <chrono> // clock()
+//#include <cstdio> // clock()
+//#include <ctime> // clock()
 
 #include"BSTree.h"
+
 
 int TreeKeys[9] = {8,10,14,13,3,6,7,4,1};
 int TreeValues[9] = {8,10,14,13,3,6,7,4,1};
 
-
 std::size_t GetSize(int arrkeys[]) {
   std::size_t _size = sizeof(TreeKeys)/sizeof(TreeKeys[0]);
   return _size; }
+
 
 int main(int argc, char** argv) {
 
@@ -57,17 +58,24 @@ int main(int argc, char** argv) {
   myTree.TreeFind(keyval);
   
   /* Find the last number in the tree and record the elapsed time*/
-  double interval_original; 
-  std::clock_t start;
-  start = std::clock();
+  //double interval_original; 
+  //std::clock_t start;
+  //start = std::clock();
+
+  /* Using std::chrono */
+  auto start = std::chrono::high_resolution_clock::now();
 
   std::cout << "The last element in the ORIGINAL tree has a key of" << " [" 
   << myTree.TreeFindLast(keyval) << "] " << std::endl;
 
-  interval_original = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-  std::cout<< "Elapsed time to find the element is " << interval_original << " [s]\n";
+  auto end = std::chrono::high_resolution_clock::now();
+  
+  std::chrono::duration<double> diff = end-start;
+  std::cout << "Elapsed time to find the element is " 
+            << diff.count() << " [s]\n";
 
-
+  //interval_original = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+  //std::cout<< "Elapsed time to find the element is " << interval_original << " [s]\n";
 
 
   /* Calling copy semantics */
@@ -138,16 +146,24 @@ int main(int argc, char** argv) {
 
 
   /* Find the last number in the tree and record the elapsed time*/
-  double interval_new;
-  std::clock_t start_new;
-  start_new = std::clock();
+  //double interval_new;
+  //std::clock_t start_new;
+  //start_new = std::clock();
+
+  /* Using std::chrono */
+  auto start_new = std::chrono::high_resolution_clock::now();
   
   std::cout << "The last element in the NEW tree has a key of" << " [" 
   << myTree_tests.TreeFindLast(keyval) << "] " << std::endl;
 
-  interval_new = ( std::clock() - start_new ) / (double) CLOCKS_PER_SEC;
-  std::cout<< "Elapsed time to find the element is " << interval_new << " [s]\n";
+  auto end_new = std::chrono::high_resolution_clock::now();
 
+  std::chrono::duration<double> diff_new = end_new - start_new;
+  std::cout << "Elapsed time to find the element is " 
+            << diff_new.count() << " [s]\n";
+
+  //interval_new = ( std::clock() - start_new ) / (double) CLOCKS_PER_SEC;
+  //std::cout<< "Elapsed time to find the element is " << interval_new << " [s]\n";
 
 
   /* Calling Tree Clear function */
@@ -159,17 +175,6 @@ int main(int argc, char** argv) {
   std::cout << "\nPrinting the NEW tree calling Clear() function...\n" 
   << myTree << std::endl;
   
-
-
-
-  
-  
-  /*for(int i=0; i < 9; i++) {
-    keyval.first = balancekey[i];
-    keyval.second = balanceval[i];
-    myTree_test_balance.InsertKey(keyval); } */
-
-
 
   return 0;
 }
