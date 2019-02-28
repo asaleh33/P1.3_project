@@ -127,7 +127,7 @@ public:
   void InsertKey(const std::pair<const K,V>& pair);
   void TreeTraversal();
   void TreeFind(const std::pair<const K,V>& pair);
-  int TreeFindLargest(const std::pair<const K,V>& pair);
+  int TreeFindLast(const std::pair<const K,V>& pair);
   void TreeBalance(Iterator begin_balance, std::size_t _size, const BSTree<K, V>& Tree);
   void TreeClear();
 
@@ -242,7 +242,7 @@ void BSTree<K,V>::TreeFind(const std::pair<const K,V>& keyval)
 
 /* Tree Find largest function */ 
 template<class K, class V>
-int BSTree<K,V>::TreeFindLargest(const std::pair<const K,V>& keyval)
+int BSTree<K,V>::TreeFindLast(const std::pair<const K,V>& keyval)
 {
   /* Checking if the tree is empty */ 
   if (head == nullptr) {

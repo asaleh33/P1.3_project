@@ -3,6 +3,10 @@
 #include<algorithm>
 #include<memory>
 #include <utility>      // std::pair, std::make_pair
+
+#include <cstdio> // clock()
+#include <ctime> // clock()
+
 #include"BSTree.h"
 
 int TreeKeys[9] = {8,10,14,13,3,6,7,4,1};
@@ -51,9 +55,20 @@ int main(int argc, char** argv) {
   std::cout << "\nRunning Find function...\n";
   /* Find a specific element in the tree */
   myTree.TreeFind(keyval);
-  /* Find the largest number in the tree */
-  std::cout << "The largest element in the ORIGINAL tree has a key of" << " [" 
-  << myTree.TreeFindLargest(keyval) << "] " << std::endl;
+  
+  /* Find the last number in the tree and record the elapsed time*/
+  double interval_original; 
+  std::clock_t start;
+  start = std::clock();
+
+  std::cout << "The last element in the ORIGINAL tree has a key of" << " [" 
+  << myTree.TreeFindLast(keyval) << "] " << std::endl;
+
+  interval_original = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+  std::cout<< "Elapsed time to find the element is " << interval_original << " [s]\n";
+
+
+
 
   /* Calling copy semantics */
   std::cout << "\nRunning copy semantics...\n";
@@ -79,13 +94,13 @@ int main(int argc, char** argv) {
   myTree.TreeClear();
   std::cout<<'\n';
 
-  /* Make sure that the original tree is freed */
+  /* Make sure that the ORIGINAL tree is freed */
   std::cout << "\nPrinting the ORIGINAL tree calling Clear() function...\n" 
   << myTree << std::endl;
   
 
   /* Running TESTS */
-  const int size = 11;
+  const int size = 100000;
   int TestKeys[size];
   int TestValues[size];
 
@@ -117,13 +132,33 @@ int main(int argc, char** argv) {
 
   /* Testing Tree Find function */
   std::cout << "\nRunning Find function [new tree]...\n";
+
   /* Find a specific element in the tree */
   myTree_tests.TreeFind(keyval);
-  /* Find the largest number in the tree */
-  std::cout << "The largest element in the NEW tree has a key of" << " [" 
-  << myTree_tests.TreeFindLargest(keyval) << "] " << std::endl;
 
 
+  /* Find the last number in the tree and record the elapsed time*/
+  double interval_new;
+  std::clock_t start_new;
+  start_new = std::clock();
+  
+  std::cout << "The last element in the NEW tree has a key of" << " [" 
+  << myTree_tests.TreeFindLast(keyval) << "] " << std::endl;
+
+  interval_new = ( std::clock() - start_new ) / (double) CLOCKS_PER_SEC;
+  std::cout<< "Elapsed time to find the element is " << interval_new << " [s]\n";
+
+
+
+  /* Calling Tree Clear function */
+  std::cout << "\nRunning Tree Clear function...\n";
+  myTree.TreeClear();
+  std::cout<<'\n';
+
+  /* Make sure that the NEW tree is freed */
+  std::cout << "\nPrinting the NEW tree calling Clear() function...\n" 
+  << myTree << std::endl;
+  
 
 
 
