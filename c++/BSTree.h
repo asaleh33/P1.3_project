@@ -107,7 +107,7 @@ public:
 
   /* Tree Constructor */  
   BSTree(): _size{0} {}
-
+  std::size_t size(){return _size;} // newline
   /* Tree Destructor */
   ~BSTree() noexcept = default;
 
@@ -127,16 +127,16 @@ public:
     
   /* Methods -- memebr functions */
   void InsertKey(const std::pair<const K,V>& pair);
-  void TreeTraversal(const std::pair<const K,V>& pair);
+  void TreeTraversal();
   void TreeFind(const std::pair<const K,V>& pair);
   int TreeFindLargest(const std::pair<const K,V>& pair);
-  void TreeBalance();
+  void TreeBalance(Iterator begin_loc, std::size_t loc_size, const BSTree<K, V>& Tree);
   void TreeClear(); 
   
   void InsertKeyRecursive(const std::pair<const K,V>& pair, Node* Ptr); 
   void TreeTraversalRecursive(Node* Ptr);
   int TreeFindRightRecursive(const std::pair<const K,V>& pair, Node* Ptr);
-  void TreeBalanceRecursive();
+  void TreeBalanceRecursive(Iterator begin_loc, std::size_t loc_size, const BSTree<K, V>& Tree);
   void CopyTreeRecursive(const BSTree<K, V>::Node* Ptr);
   void TreeClearRecursive(Node* Ptr); 
 };
@@ -195,7 +195,7 @@ void BSTree<K,V>::InsertKeyRecursive(const std::pair<const K,V>& keyval, Node* P
 
 /* Tree traversal order */
 template<class K, class V>  
-void BSTree<K,V>::TreeTraversal(const std::pair<const K,V>& k) 
+void BSTree<K,V>::TreeTraversal() 
 {
   TreeTraversalRecursive(head.get()); 
   return;
@@ -267,40 +267,73 @@ int BSTree<K,V>::TreeFindRightRecursive(const std::pair<const K,V>& keyval, Node
 }
 
 
+template<class K, class V>
+void BSTree<K,V>::TreeBalance(Iterator begin, std::size_t balancesize, const BSTree<K, V>& Tree)
+{
+  std::size_t median = balancesize/2 + 1;
+  //Iterator iter = begin;    // ------------>> or        
+  Iterator iter{begin};
+  auto sizeleft = median - 1;
+  TreeBalanceRecursive(begin, balancesize, Tree); 
+  auto sizeright = median -1 + (balancesize % 2);
+  TreeBalanceRecursive(begin, sizeleft, Tree);
+  if (sizeright == 0) {return;}
+  TreeBalanceRecursive(++iter, sizeright, Tree); 
+  return;
+}
+
+
 /* Tree Balance function */
 template<class K, class V>
-void BSTree<K,V>::TreeBalance()
-{     
-  int veckey[] = {100, 200, 300, 40, 500, 60, 70, 8000, 900}; 
-  int vecval[] = {100, 200, 300, 40, 500, 60, 70, 8000, 900};
-  std::pair<int,int> vec_keyval;
+void BSTree<K,V>::TreeBalanceRecursive(Iterator begin, std::size_t balancesize, const BSTree<K, V>& Tree)
+{ 
 
-  std::pair<int,int> vec_left;
-  std::pair<int,int> vec_right;
+  if(balancesize == 1) InsertKey(*begin);
+    std::size_t median = balancesize/2 + 1;
+    Iterator iter = begin;   
+  for(std::size_t i=0; i < median; i++)
+    ++iter;
+    InsertKey(*iter);
+  return;
+}
+
+
+/* int veckey[] = {100, 200, 300, 40, 500, 60, 70, 8000, 900}; 
+  int vecval[] = {100, 200, 300, 40, 500, 60, 70, 8000, 900};
+  std::pair<int,int> vec_keyval; */
+
+  /*std::pair<int,int> vec_left;
+  std::pair<int,int> vec_right; */
   
   //int _size_vec = sizeof(veckey)/sizeof(veckey[0]);
  
   /* Declaring std vector of pairs */
-  std::vector<std::pair <int,int> > Vector;
+  //std::vector<std::pair <int,int> > Vector;
   
   /* Inserting values in pairs */
-  for (int i=0; i<=8; i++) Vector.push_back( std::make_pair(veckey[i], vecval[i]) ); 
+  //for (int i=0; i<=8; i++) Vector.push_back( std::make_pair(veckey[i], vecval[i]) ); 
   
   /* Printing the pair vector */
   /*for (int i=0; i< Vector.size(); i++) {
     std::cout << Vector[i].first << ":" << Vector[i].second << std::endl; }*/
 
   /* Calling the class iterator and print the vector contents */
-  std::cout << "Printing vector of size [" << Vector.size() << "] in pairs...\n";
-  for (auto iter = Vector.begin(); iter != Vector.end(); ++iter){
-    vec_keyval = *iter; 
+  //std::cout << "Printing vector of size [" << Vector.size() << "] in pairs...\n";
+  /*for (auto iter = Vector.begin(); iter != Vector.end(); ++iter){
+    vec_keyval = *iter; } */
     //std::cout << vec_keyval.first << ":" << vec_keyval.second << std::endl; 
 
-  std::cout << "\nTEST FROM BALANCE\n";
-  InsertKey(vec_keyval);
-  TreeTraversal(vec_keyval); }
+  //std::cout << "\nTEST FROM BALANCE\n";
+
+   
+    //std::size_t const vec_med = Vector.size() / 2;
+
+
+    
+  //InsertKey(vec_keyval);
+  //TreeTraversal(vec_keyval); }
   
-  std::size_t const vec_med = Vector.size() / 2; 
+
 
   
   /*if (Vector.size() > 1){
@@ -320,8 +353,7 @@ void BSTree<K,V>::TreeBalance()
     std::exit(-100);
   } */
 
-  return;
-}
+ 
 
 
 /* Copy semantics:: copy Tree constructor -- deep copy */

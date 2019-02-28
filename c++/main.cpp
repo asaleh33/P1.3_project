@@ -16,9 +16,11 @@ int main(int argc, char** argv) {
   std::pair<int,int> keyval;
   BSTree<int,int> myTree_copy;
   BSTree<int, int> myTree_move; 
+  BSTree<int, int> balancedTree;
+
 
   std::cout << "Before inserting numbers, print the tree in order:\n";
-  myTree.TreeTraversal(keyval);
+  myTree.TreeTraversal();
 
   for(int i=0; i < 9; i++) {
     keyval.first = TreeKeys[i];
@@ -26,7 +28,7 @@ int main(int argc, char** argv) {
     myTree.InsertKey(keyval); }
 
   std::cout << "\nPrinting the original tree after inserting numbers -- print the tree in order: " << std::endl;
-  myTree.TreeTraversal(keyval); 
+  myTree.TreeTraversal(); 
   std::cout << "\n "; 
 
   /* Calling the class iterator to print the tree */
@@ -55,7 +57,7 @@ int main(int argc, char** argv) {
   std::cout << "\nRunning copy semantics...\n";
   myTree_copy = myTree;
   std::cout << "\nAGAIN: printing the tree BEFORE copying...\n";
-  myTree.TreeTraversal(keyval); 
+  myTree.TreeTraversal(); 
   std::cout << "\nPrinting the tree after copying...\n" << myTree_copy;
 
   /* Testing move semantics */
@@ -67,7 +69,11 @@ int main(int argc, char** argv) {
 
   /* Calling Tree Balance function  */
   std::cout << "\nRunning Balance function...\n";
-  myTree.TreeBalance();
+  BSTree<int,int> Tree;
+  myTree.TreeBalance(myTree.begin(),myTree.size(), Tree);
+  std::cout << "Traversal order from Balance function" <<  std::endl;
+  myTree.TreeTraversal(); // i will use range for
+
   
 
 
