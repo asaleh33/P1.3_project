@@ -11,8 +11,8 @@ class BSTree
 private:
 
   /* to sort number of nodes */
-  std::size_t _size; 
- 
+  std::size_t _size;
+
   struct Node;
   typedef std::unique_ptr<Node> SmartTreeNode;
   struct Node{
@@ -21,22 +21,22 @@ private:
     Node* parent;
     SmartTreeNode left;
     SmartTreeNode right;
-   
+
     Node(const std::pair<const K,V> & value, Node* p):keyval{value},parent{p},left{nullptr},right{nullptr}
     {
 	std::cout << "Constructing: " << keyval.first << ":" << keyval.second << std::endl;
     }
 
-    ~Node(){std::cout << "Destructing: " << keyval.first << ":" << keyval.second << std::endl;} 
+    ~Node(){std::cout << "Destructing: " << keyval.first << ":" << keyval.second << std::endl;}
   };
 
   /* Declaring the head pointer */
   SmartTreeNode head;
- 
+
 public:
 
   template<class KOS, class VOS>
-  friend std::ostream& operator<<(std::ostream&, const BSTree<KOS, VOS>&); 
+  friend std::ostream& operator<<(std::ostream&, const BSTree<KOS, VOS>&);
 
   /* Iterator class */
   class Iterator{
@@ -46,18 +46,18 @@ public:
     public:
       Iterator(Node* n) : current{n} {}
       std::pair<const K,V>& operator*() const { return {current->keyval}; }
-        
+
       Iterator& operator++(){
         if (! (current-> right.get()) ){
-          current = current-> parent; 
-        return *this; } 
-        
+          current = current-> parent;
+        return *this; }
+
         current = current->right.get();
 
         while (current->left.get()){
           current = current->left.get(); }
       return *this;
-      }   
+      }
 
       bool operator==(const Iterator& other) { return current == other.current; }  // they watch same node
       bool operator!=(const Iterator& other) { return !(*this == other); }
@@ -68,23 +68,23 @@ public:
   class ConstIterator: public Iterator{
     public:
       using parent = BSTree<K,V>::Iterator;
-      using parent::Iterator; 
+      using parent::Iterator;
 
       const std::pair<const K,V>& operator*() const { return parent::operator*(); }
   };
 
   /* begin function of the iterator class */
   Iterator begin() {
-    Node *current = head.get(); 
+    Node *current = head.get();
     while (current->left){
       current = current->left.get(); }
-  return Iterator(current); } 
+  return Iterator(current); }
 
   Iterator begin() const {
-    Node *current = head.get(); 
+    Node *current = head.get();
     while (current->left){
       current = current->left.get(); }
-  return Iterator(current); } 
+  return Iterator(current); }
 
 
   /* end function of the iterator class */
@@ -96,16 +96,16 @@ public:
 
   /* cbegin function of the ConstIterator class */
   ConstIterator cbegin(){
-    Node *current = head.get(); 
+    Node *current = head.get();
     while (current->left.get()){
-      current = current->left.get(); } 
+      current = current->left.get(); }
   return ConstIterator(current); }
 
   /* end function of the ConstIterator class */
   ConstIterator cend() {
   return ConstIterator{nullptr}; }
 
-  /* Tree Constructor */  
+  /* Tree Constructor */
   BSTree(): _size{0} {}
   /* Tree Destructor */
   ~BSTree() noexcept = default;
@@ -118,31 +118,30 @@ public:
 
 
   /* Move Constructor */
-  BSTree(BSTree&& Tree) noexcept; 
+  BSTree(BSTree&& Tree) noexcept;
 
   /* Move Constructor assignment */
   BSTree& operator=(BSTree&& Tree) noexcept;
 
-    
   /* Methods -- memebr functions */
   void InsertKey(const std::pair<const K,V>& pair);
   void TreeTraversal();
   void TreeFind(const std::pair<const K,V>& pair);
   int TreeFindLargest(const std::pair<const K,V>& pair);
   void TreeBalance(Iterator begin_balance, std::size_t _size, const BSTree<K, V>& Tree);
-  void TreeClear(); 
-  
-  void InsertKeyRecursive(const std::pair<const K,V>& pair, Node* Ptr); 
+  void TreeClear();
+
+  void InsertKeyRecursive(const std::pair<const K,V>& pair, Node* Ptr);
   void TreeTraversalRecursive(Node* Ptr);
   int TreeFindRightRecursive(const std::pair<const K,V>& pair, Node* Ptr);
   void TreeBalanceRecursive(Iterator begin_balance, std::size_t _size, const BSTree<K, V>& Tree);
   void CopyTreeRecursive(const BSTree<K, V>::Node* Ptr);
-  void TreeClearRecursive(Node* Ptr); 
+  void TreeClearRecursive(Node* Ptr);
 };
 
 
-/* Tree Insert function */ 
-template<class K, class V>  
+/* Tree Insert function */
+template<class K, class V>
 void BSTree<K,V>::InsertKey(const std::pair<const K,V>& keyval)
 {
   /* head "up" has to be pointed to nullptr */
@@ -269,14 +268,16 @@ int BSTree<K,V>::TreeFindRightRecursive(const std::pair<const K,V>& keyval, Node
 template<class K, class V>
 void BSTree<K,V>::TreeBalance(Iterator begin_balance, std::size_t _size, const BSTree<K, V>& Tree)
 {
-  std::size_t median = _size/2 + 1;
+
+  std::size_t median, lhs, rhs;
+  median = _size/2 + 1;
   //Iterator iter = begin_balance;    // ------------>> or        
   Iterator iter{begin_balance};
 
-  std::size_t lhs = median - 1;
+  lhs = median - 1;
   TreeBalanceRecursive(begin_balance, _size, Tree);
  
-  std::size_t rhs = median -1 + (_size % 2);
+  rhs = median -1 + (_size % 2);
   TreeBalanceRecursive(begin_balance, lhs, Tree);
   TreeBalanceRecursive(++iter, rhs, Tree); 
 
@@ -358,7 +359,7 @@ void BSTree<K,V>::TreeBalanceRecursive(Iterator begin_balance, std::size_t _size
 template <class K, class V>
 BSTree<K,V>::BSTree(const BSTree<K, V>& Tree)
 {    
-  std::cout << "Copy Tree constructor" << std::endl;
+  std::cout << "Copy Tree constructor\n" << std::endl;
   CopyTreeRecursive( Tree.head.get() );
 }
 
@@ -371,7 +372,7 @@ BSTree<K, V>& BSTree<K, V>::operator=(const BSTree<K, V>& Tree)
   auto Tree_temp = Tree;              // copy Tree to Tree_temp
   (*this) = std::move(Tree_temp);     // implement move assignment
 
-  std::cout << "End of copy assignment" << std::endl;
+  std::cout << "End of copy assignment\n" << std::endl;
   return *this;
 }
 
@@ -395,7 +396,7 @@ template <class K, class V>
 BSTree<K, V>::BSTree(BSTree&& Tree) noexcept
   :head{std::move(Tree.head)}, _size{std::move(Tree._size)}{
     Tree._size = 0;
-    std::cout << "Move Tree\n";
+    std::cout << "\nMove Tree\n";
 }
 
 /* Move assignment */ 
@@ -415,7 +416,7 @@ template <class K, class V>
 std::ostream& operator<<(std::ostream& os, const BSTree<K, V>& Tree)
 {
   if(!Tree._size){
-    return os <<"" << std::endl;}
+    return os <<"The original tree is empty" << std::endl;}
 
   for (const auto& x : Tree)
     os << x.first << ":" << x.second << " ";
@@ -453,3 +454,17 @@ void BSTree<K,V>::TreeClearRecursive(Node* Ptr)
   }
   return;
 } 
+
+
+/* Make arrays function */
+
+void MakeArray(int arr[], int length) {
+  for (int n=0; n < length; ++n)
+    std::cout << "Making an array for Testing Balance function\n" << arr[n] << ' ';
+  std::cout << '\n';
+}
+
+
+
+
+
