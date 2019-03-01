@@ -2,11 +2,7 @@
 #include<cstdlib>
 #include<algorithm>
 #include<memory>
-#include <utility>      // std::pair, std::make_pair
-#include <chrono> // clock()
-//#include <cstdio> // clock()
-//#include <ctime> // clock()
-
+#include <chrono>
 #include"BSTree.h"
 
 
@@ -23,81 +19,70 @@ int main(int argc, char** argv) {
   BSTree<int,int> myTree;
   BSTree<int,int> myTree_copy;
   BSTree<int, int> myTree_move;
-  BSTree<int, int> myTree_tests;
+  BSTree<int, int> myTree_new;
   std::pair<int,int> keyval;
 
-  std::cout << "Before inserting numbers, print the tree in order:\n";
+  std::cout << "Before inserting numbers, print the tree in a traversal order:\n";
   myTree.TreeTraversal();
 
-  for(int i=0; i < 9; i++) {
+  for(int i = 0; i < GetSize(TreeKeys); i++) {
     keyval.first = TreeKeys[i];
     keyval.second = TreeValues[i];
     myTree.InsertKey(keyval); }
 
-  std::cout << "\nPrinting the ORIGINAL tree after inserting numbers -- print the tree in order: " << std::endl;
+  std::cout << "\nPrinting the ORIGINAL tree in a traversal order after inserting numbers " << std::endl;
   myTree.TreeTraversal();
   std::cout << "\n ";
 
-  /* Calling the class iterator to print the tree */
-  std::cout << "\nPrinting keys & values of the ORIGINAL tree using the iterator\n";
+  /* Calling the class iterator to print the ORIGINAL tree */
+  std::cout << "\nPrinting keys & values of the ORIGINAL tree using the class iterator\n";
   for (auto iter = myTree.begin(); iter != myTree.end(); ++iter){
     keyval = *iter;
     std::cout << keyval.first <<":"<< keyval.second << " ";
     std::cout << " " << std::endl; }
 
 
-  /* Calling the class iterator to print the tree */
-  std::cout << "\nPrinting keys & values of the ORIGINAL tree using the const_iterator\n";
+  /* Calling the class const_iterator to print the ORIGINAL tree */
+  std::cout << "\nPrinting keys & values of the ORIGINAL tree using the class const_iterator\n";
   for (auto iter = myTree.cbegin(); iter != myTree.cend(); ++iter){
     keyval = *iter;
     std::cout << keyval.first <<":"<< keyval.second << "\n"; }
 
+
   /* Calling Tree Find function */
   std::cout << "\nRunning Find function...\n";
-  /* Find a specific element in the tree */
+
+  /* Find a specific element in the tree -- niavely I used iterator */
   myTree.TreeFind_iter(keyval);
 
-  /* Find the last number in the tree and record the elapsed time*/
-  //double interval_original;
-  //std::clock_t start;
-  //start = std::clock();
+  /* Find the largest element in the tree (not used in the benchmarking process of the code) */
+  std::cout << "The largest element in the ORIGINAL tree is" << " ["
+  << myTree.TreeFindLargest(keyval) << "] " << std::endl;
 
-  /* Using std::chrono */
+  /* Find a specific element in the tree -- WITHOUT using the iterator */
+  /* Using std::chrono to measure the time */
+  std::cout << "Find a specific element in the tree WITHOUT using iterator \n";
   auto start = std::chrono::high_resolution_clock::now();
 
-  std::cout << "The last element in the ORIGINAL tree has a key of" << " ["
-  << myTree.TreeFindLast(keyval) << "] " << std::endl;
-
-
-  int num = 3;
-  std::cout << "TEST FIND " << std::endl;
-
-  /*if (myTree.Search(keyval, num)) 
-    std::cout << "Yes! Number [" << num << "] is found in the tree...\n"; 
-  else
-    std::cout << "No! Number [" << num << "] is NOT found in the tree...\n"; */
-
+  int num = 0;
   if (myTree.TreeFind(keyval, num))
     std::cout << "Yes! Number [" << num << "] is found in the tree...\n"; 
   else
     std::cout << "No! Number [" << num << "] is NOT found in the tree...\n"; 
 
- 
-
-
-
-
-
+  /* Same job can be executed using "IsFound Function" */
+  /*if (myTree.IsFound(keyval, num)) 
+    std::cout << "Yes! Number [" << num << "] is found in the tree...\n"; 
+  else
+    std::cout << "No! Number [" << num << "] is NOT found in the tree...\n"; */
+  
   auto end = std::chrono::high_resolution_clock::now();
-
   std::chrono::duration<double> diff = end-start;
-  std::cout << "Elapsed time to find the element is "
+  /* printing time */
+  std::cout << "Elapsed time to look for the element in the ORIGINAL tree of size [" << GetSize(TreeKeys) <<"] is "
             << diff.count() << " [s]\n";
 
-  //interval_original = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-  //std::cout<< "Elapsed time to find the element is " << interval_original << " [s]\n";
-
-
+  
   /* Calling copy semantics */
   std::cout << "\nRunning copy semantics...\n";
   myTree_copy = myTree;
@@ -122,23 +107,21 @@ int main(int argc, char** argv) {
   std::cout<<'\n';
 
   /* Make sure that the ORIGINAL tree is freed */
-  std::cout << "\nPrinting the ORIGINAL tree calling Clear() function...\n" 
+  std::cout << "\nPrinting the ORIGINAL tree after calling Clear() function...\n" 
   << myTree << std::endl;
 
 
 
-
-
-  /** Running TESTS **/
-  const int size = 10;
+  /** Running the Tree functions with new tree of random values **/
+  const int size = 20;
   int TestKeys[size];
   int TestValues[size];
 
   /* Generating new tree of random values */
   std::cout << "Generating a new tree of random values" << std::endl;
   for(int i=0; i<  size; i++){
-    TestKeys[i] = (rand()%size)+1;
-    TestValues[i] = (rand()%size)+1;
+    TestKeys[i] = TestValues[i] = (rand()%size)+1;
+    //TestValues[i] = (rand()%size)+1;
 
     /* print the two arrays of keys and values */
     std::cout << TestKeys[i] << " " << TestValues[i] << std::endl;
@@ -150,70 +133,51 @@ int main(int argc, char** argv) {
 
   /* Testing Copy semantics */
   std::cout << "\nRunning copy semantics [new tree]...\n";
-  myTree_tests = myTree;
-  std::cout << "\nPrinting the [new tree] tree after copying ...\n" << myTree_tests;
+  myTree_new = myTree;
+  std::cout << "\nPrinting the [new tree] after copying ...\n" << myTree_new;
 
   /* Testing Tree Balance function for the new tree  */
-  std::cout << "\nRunning Balance function [new tree]...\n";
-  myTree_tests.TreeBalance(myTree_tests.begin(), GetSize(TestKeys), myTree_tests);
-  std::cout << "\nPrinting the NEW tree after balance...\n" << myTree_tests << std::endl;
+  std::cout << "\nRunning Balance function [new tree]...";
+  myTree_new.TreeBalance(myTree_new.begin(), GetSize(TestKeys), myTree_new);
+  std::cout << "\nPrinting the NEW tree after balance...\n" << myTree_new << std::endl;
 
   /* Testing Tree Find function */
   std::cout << "\nRunning Find function [new tree]...\n";
 
-  /* Find a specific element in the tree */
-  myTree_tests.TreeFind_iter(keyval);
+  /* Find a specific element in the tree -- niavely I used iterator */
+  myTree_new.TreeFind_iter(keyval);
 
+  /* Find the largest number in the tree and record the elapsed time*/
+  std::cout << "The largest element in the NEW tree is" << " ["
+  << myTree_new.TreeFindLargest(keyval) << "] " << std::endl;
+
+
+  /* Find a specific element in the NEW tree -- WITHOUT using the iterator */
+  /* Using std::chrono to measure the time */
+  std::cout << "Find a specific element in the NEW tree WITHOUT using iterator \n";
   
-
-
-  /* Find the last number in the tree and record the elapsed time*/
-  //double interval_new;
-  //std::clock_t start_new;
-  //start_new = std::clock();
-
-  /* Using std::chrono */
   auto start_new = std::chrono::high_resolution_clock::now();
 
-  std::cout << "The last element in the NEW tree has a key of" << " ["
-  << myTree_tests.TreeFindLast(keyval) << "] " << std::endl;
+  int num2 = 10;
+  if (myTree_new.TreeFind(keyval, num2))
+    std::cout << "Yes! Number [" << num2 << "] is found in the NEW tree...\n"; 
+  else
+    std::cout << "No! Number [" << num2 << "] is NOT found in the NEW tree...\n"; 
 
   auto end_new = std::chrono::high_resolution_clock::now();
 
   std::chrono::duration<double> diff_new = end_new - start_new;
-  std::cout << "Elapsed time to find the element is "
+  std::cout << "Elapsed time to look for the element in the NEW tree of size [" << size <<"] is "
             << diff_new.count() << " [s]\n";
 
-  //interval_new = ( std::clock() - start_new ) / (double) CLOCKS_PER_SEC;
-  //std::cout<< "Elapsed time to find the element is " << interval_new << " [s]\n";
-
-
- // int num = 2;
-  //std::cout << "TEST FIND POST " << std::endl;
-  //myTree_tests.FindNum(keyval, num);
-
-     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
   /* Calling Tree Clear function */
   std::cout << "\nRunning Tree Clear function...\n";
   myTree.TreeClear();
   std::cout<<'\n';
 
   /* Make sure that the NEW tree is freed */
-  std::cout << "\nPrinting the NEW tree calling Clear() function...\n"
+  std::cout << "\nPrinting the NEW tree after calling Clear() function...\n"
   << myTree << std::endl;
 
 

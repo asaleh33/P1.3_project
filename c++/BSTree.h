@@ -2,7 +2,6 @@
 #include<cstdlib>
 #include<algorithm>
 #include <memory>
-#include <utility>      // std::pair, std::make_pair
 
 template<class K, class V>
 class BSTree
@@ -22,12 +21,13 @@ private:
     SmartTreeNode left;
     SmartTreeNode right;
 
-    Node(const std::pair<const K,V> & value, Node* p):keyval{value},parent{p},left{nullptr},right{nullptr}
-    {
-	std::cout << "Constructing: " << keyval.first << ":" << keyval.second << std::endl;
+    Node(const std::pair<const K,V> & value, Node* p):keyval{value},parent{p},left{nullptr},right{nullptr}{
+      //std::cout << "Constructing: " << keyval.first << ":" << keyval.second << std::endl;
     }
 
-    ~Node(){std::cout << "Destructing: " << keyval.first << ":" << keyval.second << std::endl;}
+    ~Node(){
+      //std::cout << "Destructing: " << keyval.first << ":" << keyval.second << std::endl;
+    }
   };
 
   /* Declaring the head pointer */
@@ -128,14 +128,14 @@ public:
   void TreeTraversal();
   void TreeFind_iter(const std::pair<const K,V>& pair); /* in a naive way (useing the class iterator) */
   bool TreeFind(const std::pair<const K,V>& pair, int);
-  int TreeFindLast(const std::pair<const K,V>& pair);
+  int TreeFindLargest(const std::pair<const K,V>& pair);
   void TreeBalance(Iterator begin_balance, std::size_t _size, const BSTree<K, V>& Tree);
-  bool Search(const std::pair<const K,V>& pair, int); /* same as TreeFind */
+  bool IsFound(const std::pair<const K,V>& pair, int); /* same as TreeFind */
   void TreeClear();
   void InsertKeyRecursive(const std::pair<const K,V>& pair, Node* Ptr);
   void TreeTraversalRecursive(Node* Ptr);
   bool TreeFindRecursive(const std::pair<const K,V>& pair, int, Node* Ptr);
-  int TreeFindLastRecursive(const std::pair<const K,V>& pair, Node* Ptr);
+  int TreeFindLargestRecursive(const std::pair<const K,V>& pair, Node* Ptr);
   void TreeBalanceRecursive(Iterator begin_balance, std::size_t _size, const BSTree<K, V>& Tree);
   void CopyTreeRecursive(const BSTree<K, V>::Node* Ptr);
   void TreeClearRecursive(Node* Ptr);
@@ -184,10 +184,10 @@ void BSTree<K,V>::InsertKeyRecursive(const std::pair<const K,V>& keyval, Node* P
     }
   }
 
-  else
+  /*else
   {
     std::cout << "key" << " " << keyval.first << " " << "has been already added to the tree" << std::endl;
-  }
+  } */
   return;
 }
 
@@ -244,24 +244,24 @@ void BSTree<K,V>::TreeFind_iter(const std::pair<const K,V>& keyval)
 
 /* Tree Find largest function */
 template<class K, class V>
-int BSTree<K,V>::TreeFindLast(const std::pair<const K,V>& keyval)
+int BSTree<K,V>::TreeFindLargest(const std::pair<const K,V>& keyval)
 {
   /* Checking if the tree is empty */
   if (head == nullptr) {
     std::cout << "The original tree has no elements! \n";
     return -1; } // returning a negative value, which is not included in the tree
 
-  return TreeFindLastRecursive(keyval, head.get());
+  return TreeFindLargestRecursive(keyval, head.get());
 }
 
 
 template<class K, class V>
-int BSTree<K,V>::TreeFindLastRecursive(const std::pair<const K,V>& keyval, Node* Ptr)
+int BSTree<K,V>::TreeFindLargestRecursive(const std::pair<const K,V>& keyval, Node* Ptr)
 {
   /* check if right pointer is pointing to a Node. The function
      is looking for the smallest element of the tree. */
   if (Ptr-> right.get() != nullptr) {
-    return TreeFindLastRecursive(keyval, Ptr-> right.get()); }
+    return TreeFindLargestRecursive(keyval, Ptr-> right.get()); }
   else {
     return Ptr->keyval.first; }
 }
@@ -302,76 +302,23 @@ bool BSTree<K,V>::TreeFindRecursive(const std::pair<const K,V>& keyval, int num,
 
 
 template<class K, class V>
-bool BSTree<K,V>::Search(const std::pair<const K,V>& keyval, int num)
+bool BSTree<K,V>::IsFound(const std::pair<const K,V>& keyval, int num)
 {
-    Node*Ptr;
-    Ptr = head.get();
 
-    while (Ptr != nullptr) 
-    { 
-        // go to right subtree 
-        if (num > Ptr->keyval.first) 
-            Ptr = Ptr->right.get(); 
+  Node*Ptr;
+  Ptr = head.get();
+
+  while (Ptr != nullptr) 
+  { 
+    if (num > Ptr->keyval.first) 
+      Ptr = Ptr->right.get(); 
   
-        // go to left subtree  
-        else if (num < Ptr->keyval.first) 
-            Ptr = Ptr->left.get(); 
-        else
-            // if the key is found return 1
-            return true; 
-    } 
-    return false; 
-
+    else if (num < Ptr->keyval.first) 
+      Ptr = Ptr->left.get(); 
+    else return true; 
+  } 
+  return false; 
 } 
-
-
-
-
-
-
-
-    /*else
-    {
-      Ptr->left.reset(new Node{keyval, Ptr});
-    }
-  }*/
-
-  /* case 2 */
-  /*if(keyval.first > Ptr->keyval.first)
-  {
-    if(Ptr-> right.get() != nullptr)
-    {
-      InsertKeyRecursive(keyval, Ptr->right.get());
-    }
-    else
-    {
-      Ptr->right.reset(new Node{keyval, Ptr->parent});
-    }
-  }
-
-  else
-  {
-    std::cout << "key" << " " << keyval.first << " " << "has been already added to the tree" << std::endl;
-  }*/
-  
-  
-   
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* Tree Balance function */
@@ -412,59 +359,6 @@ void BSTree<K,V>::TreeBalanceRecursive(Iterator begin_balance, std::size_t _size
 }
 
 
-/* int veckey[] = {100, 200, 300, 40, 500, 60, 70, 8000, 900};
-  int vecval[] = {100, 200, 300, 40, 500, 60, 70, 8000, 900};
-  std::pair<int,int> vec_keyval; */
-
-  /*std::pair<int,int> vec_left;
-  std::pair<int,int> vec_right; */
-
-  //int _size_vec = sizeof(veckey)/sizeof(veckey[0]);
-
-  /* Declaring std vector of pairs */
-  //std::vector<std::pair <int,int> > Vector;
-
-  /* Inserting values in pairs */
-  //for (int i=0; i<=8; i++) Vector.push_back( std::make_pair(veckey[i], vecval[i]) );
-
-  /* Printing the pair vector */
-  /*for (int i=0; i< Vector.size(); i++) {
-    std::cout << Vector[i].first << ":" << Vector[i].second << std::endl; }*/
-
-  /* Calling the class iterator and print the vector contents */
-  //std::cout << "Printing vector of size [" << Vector.size() << "] in pairs...\n";
-  /*for (auto iter = Vector.begin(); iter != Vector.end(); ++iter){
-    vec_keyval = *iter; } */
-    //std::cout << vec_keyval.first << ":" << vec_keyval.second << std::endl;
-
-  //std::cout << "\nTEST FROM BALANCE\n";
-
-
-    //std::size_t const vec_med = Vector.size() / 2;
-
-
-  //InsertKey(vec_keyval);
-  //TreeTraversal(vec_keyval); }
-
-
-  /*if (Vector.size() > 1){
-    std::size_t const VecMedian = Vector.size() / 2+1;
-    //std::cout << "TEST_MEDIAN:" << " " << VecMedian << std::endl;
-    TreeBalanceRecursive();
-
-    std::vector<std::pair <int,int> > VecLeft(Vector.begin(), Vector.begin() + VecMedian);
-    TreeBalanceRecursive();
-
-    std::vector<std::pair <int,int> > split_hi(Vector.begin() + VecMedian, Vector.end());
-    TreeBalanceRecursive();
-  } */
-
-  /*else{
-    std::cerr << "[Error!] Vector size [" <<  Vector.size() << "]"<< " is indivisible. Try bigger size..." << '\n';
-    std::exit(-100);
-  } */
-
-
 /* Copy semantics:: copy Tree constructor -- deep copy */
 template <class K, class V>
 BSTree<K,V>::BSTree(const BSTree<K, V>& Tree)
@@ -472,6 +366,7 @@ BSTree<K,V>::BSTree(const BSTree<K, V>& Tree)
   std::cout << "Copy Tree constructor\n" << std::endl;
   CopyTreeRecursive( Tree.head.get() );
 }
+
 
 /* Copy assignemt for the tree */
 template<class K, class V>
@@ -509,6 +404,7 @@ BSTree<K, V>::BSTree(BSTree&& Tree) noexcept
     std::cout << "\nMove Tree\n";
 }
 
+
 /* Move assignment */
 template <class K, class V>
 BSTree<K, V>& BSTree<K, V>::operator=(BSTree&& Tree) noexcept
@@ -526,7 +422,7 @@ template <class K, class V>
 std::ostream& operator<<(std::ostream& os, const BSTree<K, V>& Tree)
 {
   if(!Tree._size){
-    return os <<"The original tree is empty" << std::endl;}
+    return os <<"The tree is empty..." << std::endl;}
 
   for (const auto& x : Tree)
     os << x.first << ":" << x.second << " ";
@@ -564,17 +460,3 @@ void BSTree<K,V>::TreeClearRecursive(Node* Ptr)
   }
   return;
 }
-
-
-/* Make arrays function */
-
-void MakeArray(int arr[], int length) {
-  for (int n=0; n < length; ++n)
-    std::cout << "Making an array for Testing Balance function\n" << arr[n] << ' ';
-  std::cout << '\n';
-}
-
-
-
-
-
