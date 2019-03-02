@@ -145,6 +145,7 @@ public:
   void TreeClearRecursive(Node* Ptr);
   void TreeBench(int, int,  double);
   void TreeBenchIter(int, int, double);
+  void TreeBenchMap(int, int, double);
 };
 
 
@@ -506,7 +507,7 @@ void BSTree<K,V>::TreeBench(int num, int size, double time)
 }
 
 
-/* print benchmarking data resulted from iterator (tree size and time) to a file */
+/* print benchmarking data resulted from the class iterator (tree size and time) to a file */
 template<class K, class V>
 void BSTree<K,V>::TreeBenchIter(int num, int size, double time)
 {
@@ -521,14 +522,15 @@ void BSTree<K,V>::TreeBenchIter(int num, int size, double time)
 
 
 
+/* print benchmarking data resulted from std::map (tree size and time) to a file */
+template<class K, class V>
+void BSTree<K,V>::TreeBenchMap(int num, int size, double time)
+{
 
+  FILE *fp;
+  fp = fopen("benchmarking_data_map.dat", "a");
+  fprintf(fp, "\n %d \t %d \t %.14g",  num, size, time); 
+  printf("\n");
+  fclose(fp);
 
-
-
-
-
-
-
-
-
-
+}

@@ -3,6 +3,8 @@
 #include<algorithm>
 #include<memory>
 #include <chrono>
+#include <map>
+
 #include"BSTree.h"
 
 
@@ -13,20 +15,16 @@ int GetSize = *(&TreeKeys + 1) - TreeKeys;
 
 int main(int argc, char** argv) {
 
-  BSTree<int,int> myTree;
-  BSTree<int,int> myTree_copy;
-  BSTree<int,int> myTree_move;
-  BSTree<int,int> myTree_copy_new;
-  BSTree<int,int> myTree_move_new;
-  std::pair<int,int> keyval;
-
-
   if (argc != 2){
     fprintf ( stderr , " Usage : %s [Tree size] \n", argv[0] );
     exit(1) ; }
  
   else{ fprintf( stdout, "running BST... \n" ); }
  
+
+  BSTree<int,int> myTree;
+  std::pair<int,int> keyval;
+
 
   std::cout << "Before inserting numbers, print the tree in a traversal order:\n";
   myTree.TreeTraversal();
@@ -93,6 +91,9 @@ int main(int argc, char** argv) {
             << diff.count() << " [s]\n";
 
   /* Calling copy semantics */
+  BSTree<int,int> myTree_copy;
+  BSTree<int,int> myTree_move;
+  
   std::cout << "\nRunning copy semantics...\n";
   myTree_copy = myTree;
   std::cout << "\nPrinting the ORIGINAL tree after copying...\n" << myTree_copy;
@@ -121,14 +122,13 @@ int main(int argc, char** argv) {
   << myTree << std::endl;
 
 
-
-
-
   /** Running the Tree functions with NEW tree of random values **/
   int size = atol(argv[1]);
   int TestKeys[size];
   int TestValues[size];
   int GetSizeNew = *(&TestKeys + 1) - TestKeys;
+
+  std::map<int,int> keyval_map;
 
   /* Generating new tree of random values */
   std::cout << "Generating a new tree of random values" << std::endl;
@@ -143,10 +143,17 @@ int main(int argc, char** argv) {
     keyval.first = TestKeys[i];
     keyval.second = TestValues[i];
     std::cout << "Random values  " << keyval.first << ":" << keyval.second << std::endl; 
-    myTree.InsertKey(keyval); }
+    myTree.InsertKey(keyval);
+    
+    /* std::map -- insert */
+    keyval_map.insert(std::pair<int, int>((rand()%size)+1, (rand()%size)+1));
+  }
 
   
   /* Calling Copy semantics */
+  BSTree<int,int> myTree_copy_new;
+  BSTree<int,int> myTree_move_new;
+  
   std::cout << "\nRunning copy semantics [new tree]...\n";
   myTree_copy_new = myTree;
   std::cout << "\nPrinting the [new tree] after copying ...\n" << myTree_copy_new;
@@ -179,51 +186,74 @@ int main(int argc, char** argv) {
   /* Using std::chrono to measure the time */
   std::cout << "Find element(s) in the NEW tree WITHOUT using iterator \n";
   
-  #define NMAX 5
-  int randnum;
+  #define NMAX 10
+  int random;
   srand(time(NULL));
   for(int i=0;i < NMAX;i++)
   {
-    randnum = (rand()%size)+1;
+    random = (rand()%size)+1;
      
     auto start_new = std::chrono::high_resolution_clock::now();
-    if (myTree_move_new.TreeFind(randnum))
-      std::cout << "Yes! Number [" << randnum << "] is found in the NEW tree...\n"; 
+    if (myTree_move_new.TreeFind(random))
+      std::cout << "Yes! Number [" << random << "] is found in the NEW tree...\n"; 
     else
-      std::cout << "No! Number [" << randnum << "] is NOT found in the NEW tree...\n"; 
+      std::cout << "No! Number [" << random << "] is NOT found in the NEW tree...\n"; 
     auto end_new = std::chrono::high_resolution_clock::now();
 
-  std::chrono::duration<double> diff_new = end_new - start_new;
-  std::cout << "Elapsed time to look for the element(s) in the NEW tree of size [" << size <<"] is "
+    std::chrono::duration<double> diff_new = end_new - start_new;
+    std::cout << "Elapsed time to look for the element(s) in the NEW tree of size [" << size <<"] is "
             << diff_new.count() << " [s]\n";
 
-  /* print benchmarking data to a file */
-  myTree_move_new.TreeBench(randnum, size, diff_new.count()); 
+    /* print benchmarking data to a file */
+    myTree_move_new.TreeBench(size, random, diff_new.count());
   }
 
  
   /* Find element(s) in the new tree -- niavely I used const_iterator to compare with */
-  int randnum2;
+  int randnom_iter;
+  
   for(int i=0;i < NMAX;i++)
   {
-    randnum2 = (rand()%size)+1;
+    randnom_iter = (rand()%size)+1;
      
-    auto start_new2 = std::chrono::high_resolution_clock::now();
+    auto start_new_iter = std::chrono::high_resolution_clock::now();
   
-    myTree_move_new.TreeFind_iter(randnum2);
+    myTree_move_new.TreeFind_iter(randnom_iter);
   
-    auto end_new2 = std::chrono::high_resolution_clock::now();
+    auto end_new_iter = std::chrono::high_resolution_clock::now();
 
-    std::chrono::duration<double> diff_new2 = end_new2 - start_new2;
+    std::chrono::duration<double> diff_new_iter = end_new_iter - start_new_iter;
     std::cout << "Elapsed time to look for the element(s) in the NEW tree of size [" << size <<"] using iterator is "
-    	      << diff_new2.count() << " [s]\n";
+    	      << diff_new_iter.count() << " [s]\n";
 
     /* print benchmarking data resulted from iterator to a file */
-    myTree_move_new.TreeBenchIter(randnum2, size, diff_new2.count()); 
+    myTree_move_new.TreeBenchIter(size, randnom_iter, diff_new_iter.count()); 
   }	
 
 
+  /* Find element(s) -- std::map */
+  std::map<int,int>::iterator iter_map;
+  int randnom_map;
+  for(int i=0;i < NMAX;i++)
+  {
+    randnom_map = (rand()%size)+1;
   
+    auto start_new_map = std::chrono::high_resolution_clock::now();
+
+    iter_map = keyval_map.find(randnom_map);
+    
+    auto end_new_map = std::chrono::high_resolution_clock::now();
+
+    std::chrono::duration<double> diff_new_map = end_new_map - start_new_map;
+    std::cout << "Elapsed time of looking for the element(s) using std::map of size [" << size <<"] is "
+            << diff_new_map.count() << " [s]\n";
+
+    std::cout << "Number [" << keyval_map.find(randnom_map)->second << "] is found (std::map) \n";
+   
+    myTree_move_new.TreeBenchMap(size, randnom_map, diff_new_map.count());
+  }
+ 
+ 
   /* Calling Tree Clear function */
   std::cout << "\nRunning Tree Clear function...\n";
   myTree_move_new.TreeClear();
