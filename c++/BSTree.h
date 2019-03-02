@@ -22,10 +22,12 @@ private:
     SmartTreeNode right;
 
     Node(const std::pair<const K,V> & value, Node* p):keyval{value},parent{p},left{nullptr},right{nullptr}{
+      
       //std::cout << "Constructing: " << keyval.first << ":" << keyval.second << std::endl;
     }
 
     ~Node(){
+      
       //std::cout << "Destructing: " << keyval.first << ":" << keyval.second << std::endl;
     }
   };
@@ -86,7 +88,6 @@ public:
       current = current->left.get(); }
   return Iterator(current); }
 
-
   /* end function of the iterator class */
   Iterator end() {
   return Iterator{nullptr}; }
@@ -107,6 +108,7 @@ public:
 
   /* Tree Constructor */
   BSTree(): _size{0} {}
+
   /* Tree Destructor */
   ~BSTree() noexcept = default;
 
@@ -115,7 +117,6 @@ public:
 
   /* Copy Constructor assignment -- deep copy */
   BSTree& operator=(const BSTree& Tree);
-
 
   /* Move Constructor */
   BSTree(BSTree&& Tree) noexcept;
@@ -126,19 +127,23 @@ public:
   /* Methods -- memebr functions */
   void InsertKey(const std::pair<const K,V>& pair);
   void TreeTraversal();
-  void TreeFind_iter(const std::pair<const K,V>& pair); /* in a naive way (useing the class iterator) */
+  void TreeFind_iter(const std::pair<const K,V>& pair); /* in a naive way (using the class iterator) */
   bool TreeFind(const std::pair<const K,V>& pair, int);
   int TreeFindLargest(const std::pair<const K,V>& pair);
+  int TreeFindSmallest(const std::pair<const K,V>& pair);
   void TreeBalance(Iterator begin_balance, std::size_t _size, const BSTree<K, V>& Tree);
   bool IsFound(const std::pair<const K,V>& pair, int); /* same as TreeFind */
   void TreeClear();
+
   void InsertKeyRecursive(const std::pair<const K,V>& pair, Node* Ptr);
   void TreeTraversalRecursive(Node* Ptr);
   bool TreeFindRecursive(const std::pair<const K,V>& pair, int, Node* Ptr);
   int TreeFindLargestRecursive(const std::pair<const K,V>& pair, Node* Ptr);
+  int TreeFindSmallestRecursive(const std::pair<const K,V>& keyval, Node* Ptr);
   void TreeBalanceRecursive(Iterator begin_balance, std::size_t _size, const BSTree<K, V>& Tree);
   void CopyTreeRecursive(const BSTree<K, V>::Node* Ptr);
   void TreeClearRecursive(Node* Ptr);
+  void TreeBench(const int, double);
 };
 
 
@@ -246,7 +251,7 @@ void BSTree<K,V>::TreeFind_iter(const std::pair<const K,V>& keyval)
 template<class K, class V>
 int BSTree<K,V>::TreeFindLargest(const std::pair<const K,V>& keyval)
 {
-  /* Checking if the tree is empty */
+  /* Check if the tree is empty */
   if (head == nullptr) {
     std::cout << "The original tree has no elements! \n";
     return -1; } // returning a negative value, which is not included in the tree
@@ -267,10 +272,35 @@ int BSTree<K,V>::TreeFindLargestRecursive(const std::pair<const K,V>& keyval, No
 }
 
 
+/* Tree Find smallest function */
+template<class K, class V>
+int BSTree<K,V>::TreeFindSmallest(const std::pair<const K,V>& keyval)
+{
+  /* Check if the tree is empty */
+  if (head == nullptr) {
+    std::cout << "The original tree has no elements! \n";
+    return -1; } // returning a negative value, which is not included in the tree
+
+  return TreeFindSmallestRecursive(keyval, head.get());
+}
+
+template<class K, class V>
+int BSTree<K,V>::TreeFindSmallestRecursive(const std::pair<const K,V>& keyval, Node* Ptr)
+{
+  /* check if right pointer is pointing to a Node. The function
+     is looking for the smallest element of the tree. */
+  if (Ptr-> left.get() != nullptr) {
+    return TreeFindSmallestRecursive(keyval, Ptr-> left.get()); }
+  else {
+    return Ptr->keyval.first; }
+}
+
+
+/* Tree Find Function */
 template<class K, class V>
 bool BSTree<K,V>::TreeFind(const std::pair<const K,V>& keyval, int num)
 {
-  /* Checking if the tree is empty */
+  /* Check if the tree is empty */
   if (head == nullptr) {
     std::cout << "The original tree has no elements! \n";
     return -1; } // returning a negative value ouside the tree range
@@ -278,24 +308,22 @@ bool BSTree<K,V>::TreeFind(const std::pair<const K,V>& keyval, int num)
   return TreeFindRecursive( keyval, num, head.get() );
 }
 
-
 template<class K, class V>
-bool BSTree<K,V>::TreeFindRecursive(const std::pair<const K,V>& keyval, int num, Node*Ptr)
+bool BSTree<K,V>::TreeFindRecursive(const std::pair<const K,V>& keyval, int num, Node* Ptr)
 {
 
   Ptr = head.get();
   while (Ptr != nullptr) 
   { 
-    /* go to right subtree */
+    /* go to right sub-tree */
     if (num > Ptr->keyval.first) 
       Ptr = Ptr->right.get(); 
   
-    /* go to left subtree  */ 
+    /* go to left sub-tree  */ 
     else if (num < Ptr->keyval.first) 
-      Ptr = Ptr->left.get(); 
-    else
-      /* if the key is found return 1 */
-      return true; 
+      Ptr = Ptr->left.get();
+ 
+    else return true; 
   } 
   return false;
 }
@@ -305,7 +333,7 @@ template<class K, class V>
 bool BSTree<K,V>::IsFound(const std::pair<const K,V>& keyval, int num)
 {
 
-  Node*Ptr;
+  Node* Ptr;
   Ptr = head.get();
 
   while (Ptr != nullptr) 
@@ -315,6 +343,7 @@ bool BSTree<K,V>::IsFound(const std::pair<const K,V>& keyval, int num)
   
     else if (num < Ptr->keyval.first) 
       Ptr = Ptr->left.get(); 
+
     else return true; 
   } 
   return false; 
@@ -340,7 +369,6 @@ void BSTree<K,V>::TreeBalance(Iterator begin_balance, std::size_t _size, const B
 
   return;
 }
-
 
 /* Tree Balance recursive function */
 template<class K, class V>
@@ -438,7 +466,7 @@ void BSTree<K,V>::TreeClear()
   /* It starts its recursive process from the head node */
   TreeClearRecursive(head.get());
 
-  /* Checking if the tree is already cleared */
+  /* Check if the tree is already cleared */
   if (head == nullptr) {
     std::cout << "The tree has been cleared..." << std::endl; }
   return;
@@ -448,8 +476,10 @@ void BSTree<K,V>::TreeClear()
 template<class K, class V>
 void BSTree<K,V>::TreeClearRecursive(Node* Ptr)
 {
+  Ptr = head.get();
+
   /* Check if the tree is empty or not, then clear the tree*/
-  if (head != nullptr){
+  if (Ptr != nullptr){
     /* Reset head to nullptr and then set empty tree of 0 size */
     head.reset();
     _size=0; }
@@ -459,4 +489,17 @@ void BSTree<K,V>::TreeClearRecursive(Node* Ptr)
     std::cout << "From the Clear function, the original tree has no elements to be cleared!" << std::endl; 
   }
   return;
+}
+
+
+/* print benchmarking data (tree size and time) to a file */
+template<class K, class V>
+void BSTree<K,V>::TreeBench(const int size, double time)
+{
+
+  FILE *fp;
+  fp = fopen("benchmarking_data.dat", "w");
+  fprintf(fp, "%d %.14g",  size, time); 
+  fclose(fp);
+
 }
