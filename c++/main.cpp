@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
   /* Calling Tree Find function */
   std::cout << "\nRunning Find function...\n";
 
-  /* Find a specific element in the tree -- niavely I used iterator */
+  /* Find a specific element in the tree -- niavely I used const_iterator */
   myTree.TreeFind_iter(keyval);
 
   /* Find the largest element in the tree (not used in the benchmarking process) */
@@ -74,13 +74,13 @@ int main(int argc, char** argv) {
   << myTree.TreeFindSmallest(keyval) << "] " << std::endl;
 
 
-  /* Find a specific element in the tree -- WITHOUT using the iterator */
+  /* Find a specific element in the tree -- WITHOUT using the const_iterator */
   /* Using std::chrono to measure the time */
   std::cout << "Find element(s) in the tree WITHOUT using iterator \n";
   auto start = std::chrono::high_resolution_clock::now();
 
   int num = 14;
-  if (myTree.TreeFind(keyval, num))
+  if (myTree.TreeFind(num))
     std::cout << "Yes! Number [" << num << "] is found in the tree...\n"; 
   else
     std::cout << "No! Number [" << num << "] is NOT found in the tree...\n"; 
@@ -112,8 +112,8 @@ int main(int argc, char** argv) {
   /* Calling Tree Balance function  */
   std::cout << "\nRunning Balance function...\n";
   std::cout << "Balance the ORIGINAL tree after moving...\n";
-  myTree.TreeBalance(myTree.begin(), GetSize, myTree_move);
-  std::cout << "\nPrinting the ORIGINAL tree after balance...\n" << myTree_move << std::endl;
+  myTree_move.TreeBalance(myTree.begin(), GetSize);
+  std::cout << "Printing the ORIGINAL tree after balance...\n" << myTree_move << std::endl;
   //myTree.TreeTraversal(); // i will use range for
 
   /* Calling Tree Clear function */
@@ -151,17 +151,17 @@ int main(int argc, char** argv) {
   /* Testing Copy semantics */
   std::cout << "\nRunning copy semantics [new tree]...\n";
   myTree_new = myTree;
-  //std::cout << "\nPrinting the [new tree] after copying ...\n" << myTree_new;
+  std::cout << "\nPrinting the [new tree] after copying ...\n" << myTree_new;
 
   /* Testing Tree Balance function for the new tree  */
   std::cout << "\nRunning Balance function [new tree]...";
-  myTree_new.TreeBalance(myTree_new.begin(), GetSizeNew, myTree_new);
+  myTree_new.TreeBalance(myTree_new.begin(), GetSizeNew);
   std::cout << "\nPrinting the NEW tree after balance...\n" << myTree_new << std::endl;
 
   /* Testing Tree Find function */
   std::cout << "\nRunning Find function [new tree]...\n";
 
-  /* Find a specific element in the tree -- niavely I used iterator */
+  /* Find a specific element in the tree -- niavely I used const_iterator */
   myTree_new.TreeFind_iter(keyval);
 
   /* Find the largest number in the tree and record the elapsed time*/
@@ -170,7 +170,7 @@ int main(int argc, char** argv) {
 
   /* Find the smallest element in the tree (not used in the benchmarking process) */
   std::cout << "The smallest element in the NEW tree is" << " ["
-  << myTree.TreeFindSmallest(keyval) << "] " << std::endl;
+  << myTree_new.TreeFindSmallest(keyval) << "] " << std::endl;
 
 
   /* Find element(s in the NEW tree -- WITHOUT using the iterator */
@@ -180,7 +180,7 @@ int main(int argc, char** argv) {
   auto start_new = std::chrono::high_resolution_clock::now();
 
   int num2 = 10;
-  if (myTree_new.TreeFind(keyval, num2))
+  if (myTree_new.TreeFind(num2))
     std::cout << "Yes! Number [" << num2 << "] is found in the NEW tree...\n"; 
   else
     std::cout << "No! Number [" << num2 << "] is NOT found in the NEW tree...\n"; 
@@ -196,12 +196,12 @@ int main(int argc, char** argv) {
  
   /* Calling Tree Clear function */
   std::cout << "\nRunning Tree Clear function...\n";
-  myTree.TreeClear();
+  myTree_new.TreeClear();
   std::cout<<'\n';
 
   /* Make sure that the NEW tree is freed */
   std::cout << "\nPrinting the NEW tree after calling Clear() function...\n"
-  << myTree << std::endl;
+  << myTree_new << std::endl;
 
 
   return 0;
