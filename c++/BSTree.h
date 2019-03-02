@@ -127,12 +127,12 @@ public:
   /* Methods -- memebr functions */
   void InsertKey(const std::pair<const K,V>& pair);
   void TreeTraversal();
-  void TreeFind_iter(int); /* in a naive way (using the class iterator) */
   bool TreeFind(int);
   int TreeFindLargest(const std::pair<const K,V>& pair);
   int TreeFindSmallest(const std::pair<const K,V>& pair);
   void TreeBalance(Iterator begin_balance, std::size_t _size);
   bool IsFound(const std::pair<const K,V>& pair, int); /* same as TreeFind */
+  void TreeFind_iter(int); /* in a naive way (using the class iterator) */
   void TreeClear();
 
   void InsertKeyRecursive(const std::pair<const K,V>& pair, Node* Ptr);
@@ -143,7 +143,7 @@ public:
   void TreeBalanceRecursive(Iterator begin_balance, std::size_t _size);
   void CopyTreeRecursive(const BSTree<K, V>::Node* Ptr);
   void TreeClearRecursive(Node* Ptr);
-  void TreeBench(const int, double);
+  void TreeBench(int, int,  double);
 };
 
 
@@ -494,12 +494,13 @@ void BSTree<K,V>::TreeClearRecursive(Node* Ptr)
 
 /* print benchmarking data (tree size and time) to a file */
 template<class K, class V>
-void BSTree<K,V>::TreeBench(const int size, double time)
+void BSTree<K,V>::TreeBench(int num, int size, double time)
 {
 
   FILE *fp;
-  fp = fopen("benchmarking_data.dat", "w");
-  fprintf(fp, "%d %.14g",  size, time); 
+  fp = fopen("benchmarking_data.dat", "a");
+  fprintf(fp, "\n %d \t %d \t %.14g", num, size, time); 
+  printf("\n");
   fclose(fp);
 
 }
