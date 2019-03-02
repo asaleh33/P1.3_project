@@ -127,7 +127,7 @@ public:
   /* Methods -- memebr functions */
   void InsertKey(const std::pair<const K,V>& pair);
   void TreeTraversal();
-  void TreeFind_iter(const std::pair<const K,V>& pair); /* in a naive way (using the class iterator) */
+  void TreeFind_iter(int); /* in a naive way (using the class iterator) */
   bool TreeFind(int);
   int TreeFindLargest(const std::pair<const K,V>& pair);
   int TreeFindSmallest(const std::pair<const K,V>& pair);
@@ -236,9 +236,9 @@ void BSTree<K,V>::TreeTraversalRecursive(Node* Ptr)
 
 /* Tree Find function can nively find a specific number in the tree using (const_iterator) */
 template<class K, class V>
-void BSTree<K,V>::TreeFind_iter(const std::pair<const K,V>& keyval)
+void BSTree<K,V>::TreeFind_iter(int num)
 {
-  const int num = 3;
+  
   for (auto iter = cbegin(); iter != cend(); ++iter) {
     auto keyval = *iter;
     //std:: cout << "TESTCONST " << keyval.first << "\n";

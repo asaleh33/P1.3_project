@@ -20,7 +20,8 @@ int main(int argc, char** argv) {
   BSTree<int,int> myTree;
   BSTree<int,int> myTree_copy;
   BSTree<int, int> myTree_move;
-  BSTree<int, int> myTree_new;
+  BSTree<int, int> myTree_copy_new;
+  BSTree<int, int> myTree_move_new;
   std::pair<int,int> keyval;
 
 
@@ -61,10 +62,7 @@ int main(int argc, char** argv) {
 
   /* Calling Tree Find function */
   std::cout << "\nRunning Find function...\n";
-
-  /* Find a specific element in the tree -- niavely I used const_iterator */
-  myTree.TreeFind_iter(keyval);
-
+  
   /* Find the largest element in the tree (not used in the benchmarking process) */
   std::cout << "The largest element in the ORIGINAL tree is" << " ["
   << myTree.TreeFindLargest(keyval) << "] " << std::endl;
@@ -74,8 +72,8 @@ int main(int argc, char** argv) {
   << myTree.TreeFindSmallest(keyval) << "] " << std::endl;
 
 
-  /* Find a specific element in the tree -- WITHOUT using the const_iterator */
-  /* Using std::chrono to measure the time */
+  /* Find element(s) in the tree -- WITHOUT using the const_iterator */
+  /* Using std::chrono to measure the time needed to find element(s) */
   std::cout << "Find element(s) in the tree WITHOUT using iterator \n";
   auto start = std::chrono::high_resolution_clock::now();
 
@@ -93,11 +91,11 @@ int main(int argc, char** argv) {
   
   auto end = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> diff = end-start;
+
   /* printing time */
-  std::cout << "Elapsed time to look for the element in the ORIGINAL tree of size [" << GetSize <<"] is "
+  std::cout << "Elapsed time to look for the element(s) in the ORIGINAL tree of size [" << GetSize <<"] is "
             << diff.count() << " [s]\n";
 
-  
   /* Calling copy semantics */
   std::cout << "\nRunning copy semantics...\n";
   myTree_copy = myTree;
@@ -109,12 +107,13 @@ int main(int argc, char** argv) {
   std::cout << "\nPrinting the ORIGINAL tree after moving...\n" << myTree_move;
   std::cout<<'\n';
 
+
   /* Calling Tree Balance function  */
   std::cout << "\nRunning Balance function...\n";
   std::cout << "Balance the ORIGINAL tree after moving...\n";
-  myTree_move.TreeBalance(myTree.begin(), GetSize);
+  myTree_move.TreeBalance(myTree_move.begin(), GetSize);
   std::cout << "Printing the ORIGINAL tree after balance...\n" << myTree_move << std::endl;
-  //myTree.TreeTraversal(); // i will use range for
+  //myTree.TreeTraversal(); // 
 
   /* Calling Tree Clear function */
   std::cout << "\nRunning Tree Clear function...\n";
@@ -124,6 +123,7 @@ int main(int argc, char** argv) {
   /* Make sure that the ORIGINAL tree is freed */
   std::cout << "\nPrinting the ORIGINAL tree after calling Clear() function...\n" 
   << myTree << std::endl;
+
 
 
 
@@ -146,41 +146,52 @@ int main(int argc, char** argv) {
     /* Filling "tree keyval" -- std::pair */
     keyval.first = TestKeys[i];
     keyval.second = TestValues[i];
+    std::cout << "Random values  " << keyval.first << ":" << keyval.second << std::endl; 
     myTree.InsertKey(keyval); }
 
-  /* Testing Copy semantics */
+
+  
+  /* Calling Copy semantics */
   std::cout << "\nRunning copy semantics [new tree]...\n";
-  myTree_new = myTree;
-  std::cout << "\nPrinting the [new tree] after copying ...\n" << myTree_new;
+  myTree_copy_new = myTree;
+  std::cout << "\nPrinting the [new tree] after copying ...\n" << myTree_copy_new;
+
+
+  /* Calling move semantics */
+  std::cout << "Running move semantics [new tree]...\n";
+  myTree_move_new = std::move(myTree_copy_new);
+  std::cout << "\nPrinting the ORIGINAL tree after moving...\n" << myTree_move_new;
+  std::cout<<'\n';
+
+
 
   /* Testing Tree Balance function for the new tree  */
   std::cout << "\nRunning Balance function [new tree]...";
-  myTree_new.TreeBalance(myTree_new.begin(), GetSizeNew);
-  std::cout << "\nPrinting the NEW tree after balance...\n" << myTree_new << std::endl;
+  myTree_move_new.TreeBalance(myTree.begin(), GetSizeNew);
+  std::cout << "\nPrinting the NEW tree after balance...\n" << myTree_move_new << std::endl;
 
   /* Testing Tree Find function */
   std::cout << "\nRunning Find function [new tree]...\n";
 
-  /* Find a specific element in the tree -- niavely I used const_iterator */
-  myTree_new.TreeFind_iter(keyval);
+  /* Find element(s) in the new tree -- niavely I used const_iterator */
+  myTree_move_new.TreeFind_iter(7);
 
   /* Find the largest number in the tree and record the elapsed time*/
   std::cout << "The largest element in the NEW tree is" << " ["
-  << myTree_new.TreeFindLargest(keyval) << "] " << std::endl;
+  << myTree_move_new.TreeFindLargest(keyval) << "] " << std::endl;
 
   /* Find the smallest element in the tree (not used in the benchmarking process) */
   std::cout << "The smallest element in the NEW tree is" << " ["
-  << myTree_new.TreeFindSmallest(keyval) << "] " << std::endl;
+  << myTree_move_new.TreeFindSmallest(keyval) << "] " << std::endl;
 
-
-  /* Find element(s in the NEW tree -- WITHOUT using the iterator */
+  /* Find element(s) in the NEW tree -- WITHOUT using the iterator */
   /* Using std::chrono to measure the time */
   std::cout << "Find element(s) in the NEW tree WITHOUT using iterator \n";
   
   auto start_new = std::chrono::high_resolution_clock::now();
 
   int num2 = 10;
-  if (myTree_new.TreeFind(num2))
+  if (myTree_move_new.TreeFind(num2))
     std::cout << "Yes! Number [" << num2 << "] is found in the NEW tree...\n"; 
   else
     std::cout << "No! Number [" << num2 << "] is NOT found in the NEW tree...\n"; 
@@ -188,20 +199,21 @@ int main(int argc, char** argv) {
   auto end_new = std::chrono::high_resolution_clock::now();
 
   std::chrono::duration<double> diff_new = end_new - start_new;
-  std::cout << "Elapsed time to look for the element in the NEW tree of size [" << size <<"] is "
+  std::cout << "Elapsed time to look for the element(s) in the NEW tree of size [" << size <<"] is "
             << diff_new.count() << " [s]\n";
 
+
   /* print benchmarking data to a file */
-  myTree_new.TreeBench(size, diff_new.count()); 
+  myTree_move_new.TreeBench(size, diff_new.count()); 
  
   /* Calling Tree Clear function */
   std::cout << "\nRunning Tree Clear function...\n";
-  myTree_new.TreeClear();
+  myTree_move_new.TreeClear();
   std::cout<<'\n';
 
   /* Make sure that the NEW tree is freed */
   std::cout << "\nPrinting the NEW tree after calling Clear() function...\n"
-  << myTree_new << std::endl;
+  << myTree_move_new<< std::endl;
 
 
   return 0;
