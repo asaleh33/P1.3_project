@@ -3,7 +3,6 @@
 #include<algorithm>
 #include<memory>
 #include <chrono>
-#include<time.h>
 #include"BSTree.h"
 
 
@@ -203,9 +202,26 @@ int main(int argc, char** argv) {
   }
 
  
+  /* Find element(s) in the new tree -- niavely I used const_iterator to compare with */
+  int randnum2;
+  for(int i=0;i < NMAX;i++)
+  {
+    randnum2 = (rand()%size)+1;
+     
+    auto start_new2 = std::chrono::high_resolution_clock::now();
+  
+    myTree_move_new.TreeFind_iter(randnum2);
+  
+    auto end_new2 = std::chrono::high_resolution_clock::now();
 
-  /* Find element(s) in the new tree -- niavely I used const_iterator */
-  myTree_move_new.TreeFind_iter(7);
+    std::chrono::duration<double> diff_new2 = end_new2 - start_new2;
+    std::cout << "Elapsed time to look for the element(s) in the NEW tree of size [" << size <<"] using iterator is "
+    	      << diff_new2.count() << " [s]\n";
+
+    /* print benchmarking data resulted from iterator to a file */
+    myTree_move_new.TreeBenchIter(randnum2, size, diff_new2.count()); 
+  }	
+
 
   
   /* Calling Tree Clear function */

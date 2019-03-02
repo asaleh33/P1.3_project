@@ -144,6 +144,7 @@ public:
   void CopyTreeRecursive(const BSTree<K, V>::Node* Ptr);
   void TreeClearRecursive(Node* Ptr);
   void TreeBench(int, int,  double);
+  void TreeBenchIter(int, int, double);
 };
 
 
@@ -499,8 +500,35 @@ void BSTree<K,V>::TreeBench(int num, int size, double time)
 
   FILE *fp;
   fp = fopen("benchmarking_data.dat", "a");
-  fprintf(fp, "\n %d \t %d \t %.14g", num, size, time); 
+  fprintf(fp, "\n %d \t %d \t %.14g",  num, size, time); 
+  printf("\n");
+  fclose(fp);
+}
+
+
+/* print benchmarking data resulted from iterator (tree size and time) to a file */
+template<class K, class V>
+void BSTree<K,V>::TreeBenchIter(int num, int size, double time)
+{
+
+  FILE *fp;
+  fp = fopen("benchmarking_data_iter.dat", "a");
+  fprintf(fp, "\n %d \t %d \t %.14g",  num, size, time); 
   printf("\n");
   fclose(fp);
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

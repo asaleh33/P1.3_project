@@ -24,6 +24,6 @@ plot:
 
 
 clean:
-	@rm	-f	*~	$(EXE)
+	@rm	-f	*~	bench*.dat	$(EXE)
 
 .PHONY:clean
