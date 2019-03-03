@@ -9,8 +9,8 @@ class BSTree
 
 private:
 
-  /* to sort number of nodes */
-  std::size_t _size;
+  /* number of nodes/keys */
+  int _size;
 
   struct Node;
   typedef std::unique_ptr<Node> SmartTreeNode;
@@ -130,7 +130,7 @@ public:
   bool TreeFind(int);
   int TreeFindLargest(const std::pair<const K,V>& pair);
   int TreeFindSmallest(const std::pair<const K,V>& pair);
-  void TreeBalance(Iterator begin_balance, std::size_t _size);
+  void TreeBalance(Iterator begin_balance, int _size);
   bool IsFound(const std::pair<const K,V>& pair, int); /* same as TreeFind */
   void TreeFind_iter(int); /* in a naive way (using the class iterator) */
   void TreeClear();
@@ -140,7 +140,7 @@ public:
   bool TreeFindRecursive(int, Node* Ptr);
   int TreeFindLargestRecursive(const std::pair<const K,V>& pair, Node* Ptr);
   int TreeFindSmallestRecursive(const std::pair<const K,V>& keyval, Node* Ptr);
-  void TreeBalanceRecursive(Iterator begin_balance, std::size_t _size);
+  void TreeBalanceRecursive(Iterator begin_balance, int _size);
   void CopyTreeRecursive(const BSTree<K, V>::Node* Ptr);
   void TreeClearRecursive(Node* Ptr);
 
@@ -357,34 +357,35 @@ bool BSTree<K,V>::IsFound(const std::pair<const K,V>& keyval, int num)
 
 /* Tree Balance function */
 template<class K, class V>
-void BSTree<K,V>::TreeBalance(Iterator begin_balance, std::size_t _size)
+void BSTree<K,V>::TreeBalance(Iterator begin_balance, int _size)
 {
 
-  std::size_t median, lhs, rhs;
+  int median, lhsize, rhsize;
   median = _size/2 + 1;
   //Iterator iter = begin_balance;    // ------------>> or
   Iterator iter{begin_balance};
 
-  lhs = median - 1;
-  TreeBalanceRecursive(begin_balance, _size);
+  lhsize = median - 1;
+  TreeBalanceRecursive(begin_balance, lhsize);
 
-  rhs = median -1 + (_size % 2);
-  TreeBalanceRecursive(begin_balance, lhs);
-  TreeBalanceRecursive(++iter, rhs);
+  rhsize = (median -1) + (_size % 2);
+  if (rhsize > 0){
 
-  return;
+  TreeBalanceRecursive(++iter, rhsize);
+  }
+  else {return;}
 }
 
 /* Tree Balance recursive function */
 template<class K, class V>
-void BSTree<K,V>::TreeBalanceRecursive(Iterator begin_balance, std::size_t _size)
+void BSTree<K,V>::TreeBalanceRecursive(Iterator begin_balance, int _size)
 {
 
   if(_size == 1) InsertKey(*begin_balance);
 
-  std::size_t median = _size/2 + 1;
+  int median = _size/2 + 1;
   Iterator iter = begin_balance;
-  for(std::size_t i=0; i < median; i++)
+  for(int i=0; i < median; i++)
     ++iter;
     InsertKey(*iter);
 
@@ -496,9 +497,6 @@ void BSTree<K,V>::TreeClearRecursive(Node* Ptr)
   return;
 }
 
-
-
-
 /* Save benchmarking data, of Find function for unbalanced tree , to a file */
 template<class K, class V>
 void BSTree<K,V>::TreeBenchUnBalance(int size, int num, double time)
@@ -507,14 +505,9 @@ void BSTree<K,V>::TreeBenchUnBalance(int size, int num, double time)
   FILE *fp;
   fp = fopen("benchmarking_data_unbalanced.dat", "a");
   fprintf(fp, "\n %d \t %d \t %.14g", size, num, time); 
-  printf("\n");
+  //printf("\n");
   fclose(fp);
 }
-
-
-
-
-
 
 /* Save benchmarking data, of Balance function, to a file */
 template<class K, class V>
@@ -522,12 +515,11 @@ void BSTree<K,V>::TreeBenchBalance(int size, double time)
 {
 
   FILE *fp;
-  fp = fopen("benchmarking_data_balance.dat", "a");
+  fp = fopen("balance_time.dat", "a");
   fprintf(fp, "\n %d \t %.14g", size, time); 
   printf("\n");
   fclose(fp);
 }
-
 
 /* Save benchmarking data (tree size and time) to a file */
 template<class K, class V>
@@ -535,12 +527,11 @@ void BSTree<K,V>::TreeBench(int size, int num, double time)
 {
 
   FILE *fp;
-  fp = fopen("benchmarking_data.dat", "a");
+  fp = fopen("benchmarking_data_balanced.dat", "a");
   fprintf(fp, "\n %d \t %d \t %.14g", size, num, time); 
-  printf("\n");
+  //printf("\n");
   fclose(fp);
 }
-
 
 /* Save benchmarking data resulted from the class iterator (tree size and time) to a file */
 template<class K, class V>
@@ -550,11 +541,10 @@ void BSTree<K,V>::TreeBenchIter(int size, int num, double time)
   FILE *fp;
   fp = fopen("benchmarking_data_iter.dat", "a");
   fprintf(fp, "\n %d \t %d \t %.14g", size, num, time); 
-  printf("\n");
+  //printf("\n");
   fclose(fp);
 
 }
-
 
 /* Save benchmarking data resulted from std::map (tree size and time) to a file */
 template<class K, class V>
@@ -564,7 +554,7 @@ void BSTree<K,V>::TreeBenchMap(int size, int num, double time)
   FILE *fp;
   fp = fopen("benchmarking_data_map.dat", "a");
   fprintf(fp, "\n %d \t %d \t %.14g", size, num, time); 
-  printf("\n");
+  //printf("\n");
   fclose(fp);
 
 }

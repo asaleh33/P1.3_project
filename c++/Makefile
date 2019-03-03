@@ -1,4 +1,4 @@
-CXX=g++	-O3
+CXX=g++
 
 CXXFLAGS=-Wall	-Wextra	-g	-ggdb
 
@@ -24,6 +24,6 @@ plot:
 
 
 clean:
-	@rm	-f	*~	bench*.dat	$(EXE)
+	@rm	-f	*~	*.dat	*.txt	$(EXE)
 
 .PHONY:clean

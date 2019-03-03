@@ -4,9 +4,7 @@
 #include<memory>
 #include <chrono>
 #include <map>
-
 #include"BSTree.h"
-
 
 int TreeKeys[9] = {8,10,14,13,3,6,7,4,1};
 int TreeValues[9] = {8,10,14,13,3,6,7,4,1};
@@ -123,6 +121,8 @@ int main(int argc, char** argv) {
 
 
 
+
+
   /** Running the Tree functions with NEW tree of random values **/
   int size = atol(argv[1]);
   int NewKeys[size];
@@ -143,7 +143,7 @@ int main(int argc, char** argv) {
     /* Refilling randomly "tree keyval" -- std::pair */
     keyval.first = NewKeys[i];
     keyval.second = NewValues[i];
-    std::cout << "Random values  " << keyval.first << ":" << keyval.second << std::endl; 
+    //std::cout << "Random values  " << keyval.first << ":" << keyval.second << std::endl; 
     myTree.InsertKey(keyval);
     
     /* std::map -- insert */
@@ -157,23 +157,22 @@ int main(int argc, char** argv) {
   
   std::cout << "\nRunning copy semantics [new tree]...\n";
   myTree_copy_new = myTree;
-  std::cout << "\nPrinting the [new tree] after copying ...\n" << myTree_copy_new;
+  //std::cout << "\nPrinting the [new tree] after copying ...\n" << myTree_copy_new;
 
 
   /* Calling move semantics */
   std::cout << "Running move semantics [new tree]...\n";
   myTree_move_new = std::move(myTree_copy_new);
-  std::cout << "\nPrinting the [new tree] after moving ...\n" << myTree_move_new;
-  std::cout<<'\n';
+  //std::cout << "\nPrinting the [new tree] after moving ...\n" << myTree_move_new;
+  //std::cout<<'\n';
 
-  /* Measuring time of find an element in unbalanced tree */
-
+  /* Measuring time of find an element in unbalanced [new tree] */
   #define NMAX 10
   int random_unbalanced;
   srand(time(NULL));
   std::chrono::duration<double> diff_new_unbalanced;
   
-  for(int i=0;i < NMAX;i++)
+  for(int i = 0; i < NMAX; i++)
   {
     random_unbalanced = (rand()%size)+1;
 
@@ -193,15 +192,10 @@ int main(int argc, char** argv) {
 
     /* print benchmarking data to a file */
     myTree_move_new.TreeBenchUnBalance(size, random_unbalanced, diff_new_unbalanced.count());
-  }
+    }
 
+ 
   
-
-
-
-
-
-
   /* Calling Tree Balance function for the new tree  */
   std::chrono::duration<double> diff_new_balance;
   std::cout << "\nRunning Balance function [new tree]...";
@@ -209,7 +203,7 @@ int main(int argc, char** argv) {
   /* Measuring balance time */
   auto start_new_balance = std::chrono::high_resolution_clock::now();
   
-  myTree_move_new.TreeBalance(myTree.begin(), GetSizeNew);
+  myTree_move_new.TreeBalance(myTree_move_new.begin(), GetSizeNew);
 
   auto end_new_balance = std::chrono::high_resolution_clock::now();
 
@@ -220,8 +214,10 @@ int main(int argc, char** argv) {
   /* Save benchmarking data resulted from map find function to a file */
   myTree_move_new.TreeBenchBalance(size, diff_new_balance.count());
 
+  //std::cout << "\nPrinting the [new tree] after balance...\n" << myTree_move_new << std::endl;
 
-  std::cout << "\nPrinting the [new tree] after balance...\n" << myTree_move_new << std::endl;
+
+
 
   /* Calling Tree Find function */
   std::cout << "\nRunning Find function [new tree]...\n";
