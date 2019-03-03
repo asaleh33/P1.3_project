@@ -143,6 +143,9 @@ public:
   void TreeBalanceRecursive(Iterator begin_balance, std::size_t _size);
   void CopyTreeRecursive(const BSTree<K, V>::Node* Ptr);
   void TreeClearRecursive(Node* Ptr);
+
+  void TreeBenchUnBalance(int, int, double);
+  void TreeBenchBalance(int, double);
   void TreeBench(int, int,  double);
   void TreeBenchIter(int, int, double);
   void TreeBenchMap(int, int, double);
@@ -494,42 +497,73 @@ void BSTree<K,V>::TreeClearRecursive(Node* Ptr)
 }
 
 
-/* print benchmarking data (tree size and time) to a file */
+
+
+/* Save benchmarking data, of Find function for unbalanced tree , to a file */
 template<class K, class V>
-void BSTree<K,V>::TreeBench(int num, int size, double time)
+void BSTree<K,V>::TreeBenchUnBalance(int size, int num, double time)
+{
+ 
+  FILE *fp;
+  fp = fopen("benchmarking_data_unbalanced.dat", "a");
+  fprintf(fp, "\n %d \t %d \t %.14g", size, num, time); 
+  printf("\n");
+  fclose(fp);
+}
+
+
+
+
+
+
+/* Save benchmarking data, of Balance function, to a file */
+template<class K, class V>
+void BSTree<K,V>::TreeBenchBalance(int size, double time)
+{
+
+  FILE *fp;
+  fp = fopen("benchmarking_data_balance.dat", "a");
+  fprintf(fp, "\n %d \t %.14g", size, time); 
+  printf("\n");
+  fclose(fp);
+}
+
+
+/* Save benchmarking data (tree size and time) to a file */
+template<class K, class V>
+void BSTree<K,V>::TreeBench(int size, int num, double time)
 {
 
   FILE *fp;
   fp = fopen("benchmarking_data.dat", "a");
-  fprintf(fp, "\n %d \t %d \t %.14g",  num, size, time); 
+  fprintf(fp, "\n %d \t %d \t %.14g", size, num, time); 
   printf("\n");
   fclose(fp);
 }
 
 
-/* print benchmarking data resulted from the class iterator (tree size and time) to a file */
+/* Save benchmarking data resulted from the class iterator (tree size and time) to a file */
 template<class K, class V>
-void BSTree<K,V>::TreeBenchIter(int num, int size, double time)
+void BSTree<K,V>::TreeBenchIter(int size, int num, double time)
 {
 
   FILE *fp;
   fp = fopen("benchmarking_data_iter.dat", "a");
-  fprintf(fp, "\n %d \t %d \t %.14g",  num, size, time); 
+  fprintf(fp, "\n %d \t %d \t %.14g", size, num, time); 
   printf("\n");
   fclose(fp);
 
 }
 
 
-
-/* print benchmarking data resulted from std::map (tree size and time) to a file */
+/* Save benchmarking data resulted from std::map (tree size and time) to a file */
 template<class K, class V>
-void BSTree<K,V>::TreeBenchMap(int num, int size, double time)
+void BSTree<K,V>::TreeBenchMap(int size, int num, double time)
 {
 
   FILE *fp;
   fp = fopen("benchmarking_data_map.dat", "a");
-  fprintf(fp, "\n %d \t %d \t %.14g",  num, size, time); 
+  fprintf(fp, "\n %d \t %d \t %.14g", size, num, time); 
   printf("\n");
   fclose(fp);
 
