@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
   std::cout << "Balance the ORIGINAL tree after moving...\n";
   myTree_move.TreeBalance(myTree_move.begin(), GetSize);
   std::cout << "Printing the ORIGINAL tree after balance...\n" << myTree_move << std::endl;
-  //myTree.TreeTraversal(); // 
+  //myTree.TreeTraversal(); 
 
   /* Calling Tree Clear function */
   std::cout << "\nRunning Tree Clear function...\n";
@@ -157,14 +157,14 @@ int main(int argc, char** argv) {
   
   std::cout << "\nRunning copy semantics [new tree]...\n";
   myTree_copy_new = myTree;
-  //std::cout << "\nPrinting the [new tree] after copying ...\n" << myTree_copy_new;
+  std::cout << "\nPrinting the [new tree] after copying ...\n" << myTree_copy_new;
 
 
   /* Calling move semantics */
   std::cout << "Running move semantics [new tree]...\n";
   myTree_move_new = std::move(myTree_copy_new);
-  //std::cout << "\nPrinting the [new tree] after moving ...\n" << myTree_move_new;
-  //std::cout<<'\n';
+  std::cout << "\nPrinting the [new tree] after moving ...\n" << myTree_move_new;
+  std::cout<<'\n';
 
   /* Measuring time of find an element in unbalanced [new tree] */
   #define NMAX 10
@@ -214,7 +214,7 @@ int main(int argc, char** argv) {
   /* Save benchmarking data resulted from map find function to a file */
   myTree_move_new.TreeBenchBalance(size, diff_new_balance.count());
 
-  //std::cout << "\nPrinting the [new tree] after balance...\n" << myTree_move_new << std::endl;
+  std::cout << "\nPrinting the [new tree] after balance...\n" << myTree_move_new << std::endl;
 
 
 

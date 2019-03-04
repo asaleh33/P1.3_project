@@ -497,6 +497,8 @@ void BSTree<K,V>::TreeClearRecursive(Node* Ptr)
   return;
 }
 
+
+
 /* Save benchmarking data, of Find function for unbalanced tree , to a file */
 template<class K, class V>
 void BSTree<K,V>::TreeBenchUnBalance(int size, int num, double time)
@@ -543,7 +545,6 @@ void BSTree<K,V>::TreeBenchIter(int size, int num, double time)
   fprintf(fp, "\n %d \t %d \t %.14g", size, num, time); 
   //printf("\n");
   fclose(fp);
-
 }
 
 /* Save benchmarking data resulted from std::map (tree size and time) to a file */
@@ -556,5 +557,4 @@ void BSTree<K,V>::TreeBenchMap(int size, int num, double time)
   fprintf(fp, "\n %d \t %d \t %.14g", size, num, time); 
   //printf("\n");
   fclose(fp);
-
 }
