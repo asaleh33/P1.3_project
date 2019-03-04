@@ -35,13 +35,9 @@ plt.plot(size_stdmap, time_stdmap, linestyle='-', linewidth=1.5, color='#90EE90'
 plt.legend(loc="best", prop={'size':10}, frameon=False)
 plt.grid()
 plt.yscale('log')
-plt.xlim(1,500000)
-#plt.xticks([8,16,24,32,40])
-##plt.yticks([1e3,1e4, 5e4]) # procs 8
-#plt.yticks([1e3,1e4, 8e4]) # procs 48
 plt.xlabel('# of nodes', fontsize=15)
 plt.ylabel('Time [s]', fontsize=15)
-plt.title(r"$Find ()\ performance$", fontsize=15)
+plt.title(r"$Find ()\ performance$", fontsize=14)
 plt.rc('font', **font)
 plt.tight_layout()
 plt.savefig('find_perf.pdf')
