@@ -15,10 +15,11 @@ def get_params(inputfile, par1, par2):
     size = []
     runtime = []
     file = open(inputfile, "r")
-    for line in file:	
+    for line in file:
         sep = line.strip().split()
         size.append(int(sep[par1]))
         runtime.append(float(sep[par2]))
+    file.close()
     return size, runtime;
 
 file1 = sys.argv[1]
