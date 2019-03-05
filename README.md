@@ -1,6 +1,6 @@
 # P1.3_project:  Advanced Programming
 
-## C++ part
+## C++ part:
 
 Please see [file](./c++/).
 
