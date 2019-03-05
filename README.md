@@ -8,5 +8,5 @@ Please see [file](./c++/)
 
 # Python part:
 
-Please see [file](./python/exam_solution.py).
+Please see [file](./python/).
 
