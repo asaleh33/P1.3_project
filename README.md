@@ -1,12 +1,10 @@
-# P1.3_project
+# P1.3_project:  Advanced Programming
 
-
-
-# C++ part:
+## C++ part
 
 Please see [file](./c++/)
 
-# Python part:
+## Python part:
 
 Please see [file](./python/).
 
