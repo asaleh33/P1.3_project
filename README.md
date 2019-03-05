@@ -4,7 +4,7 @@
 
 # C++ part:
 
-Please see [file](./c++/readme.md).
+Please see [file](./c++/)
 
 # Python part:
 
