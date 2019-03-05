@@ -1,5 +1,9 @@
 # P1.3_project:  Advanced Programming
 
+## Lecturer: Alberto  Sartori
+
+
+
 ## C++ part:
 
 Please see [file](./c++/).
