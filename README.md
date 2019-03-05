@@ -2,7 +2,7 @@
 
 ## C++ part
 
-Please see [file](./c++/)
+Please see [file](./c++/).
 
 ## Python part:
 
