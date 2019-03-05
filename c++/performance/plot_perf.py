@@ -9,7 +9,7 @@ font = {'family' : 'normal',
 
 if len(sys.argv) != 4:
     print("Usage:", sys.argv[0], "file1 file2 file3") 
-    sys.exit(0)
+    sys.exit(1)
 
 def get_params(inputfile, par1, par2):
     size = []
