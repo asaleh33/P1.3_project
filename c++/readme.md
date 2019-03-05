@@ -17,21 +17,22 @@ Except for `TreeFind_iter`, the above member functions start their recursive pro
 
 The code performance was tested with respect the `TreeFind()` function for *unbalanced* and *balanced* tree. The benchmarking data (tree size & function time) are collected for each process in a separate file. Measuring time is shown in the main program `main.cpp`and carried out using `std::chrono::high_resolution_clock::now()` from `<chrono>`library.  The performance of the code is also tested using `std::map`. The results of this benchmarking process is shown the Figs.
 
-![](./.aux/find_perf.png)
 
 
-
-![](./.aux/balance_find_iter_perf.png)
-
-
+<img src="./.aux/find_perf.png" align="middle" width="600px" />
 
 
 
 
 
+<img src="./.aux/balance_find_iter_perf.png" align="middle" width="600px" />
+
+```
+<figure>
+<img src="./.aux/balance_find_iter_perf.png" align="middle" width="600px" />
+<figcaption><bold>Figure 1.</bold> Figure caption sample<figcaption>
+<figure>
 
 
 
-
-
-
+```
