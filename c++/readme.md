@@ -43,5 +43,7 @@ Time as a function of number of nodes for both `TreeFind()`, using the class Ite
 
 
 
-I executed the code on my laptop of only two CPU cores. The data files and relative scripts of the benchmarking process are located in the *performance* `directory` and also can be found by [here](./performance/) 
+I executed the code on my laptop of only two CPU cores. The data files and relative scripts of the benchmarking process are located in the *performance* `directory` and also can be found by [here](./performance/).
+
+In order to run the code, do `./run.sh` [here](./).
 
