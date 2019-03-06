@@ -2,8 +2,6 @@ CXX=g++
 
 CXXFLAGS=-Wall	-Wextra	-g	-ggdb
 
-#CXXFLAGS=-g	-ggdb
-
 CPPFLAGS=-std=c++14
 
 SRC=main.cpp
@@ -12,8 +10,10 @@ EXE=$(SRC:.cpp=.x)
 
 all:$(EXE)
 
+TREESIZE=5000
+
 run:clean all
-	./$(EXE)
+	./$(EXE)	$(TREESIZE)
 
 %.x:%.cpp
 	$(CXX)	$<	$(CXXFLAGS)	-o	$@	$(CPPFLAGS)
