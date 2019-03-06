@@ -10,7 +10,7 @@ EXE=$(SRC:.cpp=.x)
 
 all:$(EXE)
 
-TREESIZE=5000
+TREESIZE=100
 
 run:clean all
 	./$(EXE)	$(TREESIZE)

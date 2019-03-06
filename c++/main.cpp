@@ -122,7 +122,6 @@ int main(int argc, char** argv) {
 
 
 
-
   /** Running the Tree functions with NEW tree of random values **/
   int size = atol(argv[1]);
   int NewKeys[size];
@@ -194,7 +193,6 @@ int main(int argc, char** argv) {
     myTree_move_new.TreeBenchUnBalance(size, random_unbalanced, diff_new_unbalanced.count());
     }
 
- 
   
   /* Calling Tree Balance function for the new tree  */
   std::chrono::duration<double> diff_new_balance;
@@ -215,8 +213,6 @@ int main(int argc, char** argv) {
   myTree_move_new.TreeBenchBalance(size, diff_new_balance.count());
 
   std::cout << "\nPrinting the [new tree] after balance...\n" << myTree_move_new << std::endl;
-
-
 
 
   /* Calling Tree Find function */

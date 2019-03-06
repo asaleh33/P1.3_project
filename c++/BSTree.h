@@ -152,6 +152,11 @@ public:
 };
 
 
+
+
+/** Memeber functions **/
+
+
 /* Tree Insert function */
 template<class K, class V>
 void BSTree<K,V>::InsertKey(const std::pair<const K,V>& keyval)
