@@ -274,7 +274,7 @@ template<class K, class V>
 int BSTree<K,V>::TreeFindLargestRecursive(const std::pair<const K,V>& keyval, Node* Ptr)
 {
   /* check if right pointer is pointing to a Node. The function
-     is looking for the smallest element of the tree. */
+     is looking for the largest element of the tree. */
   if (Ptr-> right.get() != nullptr) {
     return TreeFindLargestRecursive(keyval, Ptr-> right.get()); }
   else {
@@ -297,7 +297,7 @@ int BSTree<K,V>::TreeFindSmallest(const std::pair<const K,V>& keyval)
 template<class K, class V>
 int BSTree<K,V>::TreeFindSmallestRecursive(const std::pair<const K,V>& keyval, Node* Ptr)
 {
-  /* check if right pointer is pointing to a Node. The function
+  /* check if left pointer is pointing to a Node. The function
      is looking for the smallest element of the tree. */
   if (Ptr-> left.get() != nullptr) {
     return TreeFindSmallestRecursive(keyval, Ptr-> left.get()); }
